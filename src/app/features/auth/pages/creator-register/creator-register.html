@@ -1,0 +1,61 @@
+<div class="auth-container">
+  <div class="auth-card register-card anime-item">
+    
+    <div class="auth-header anime-item">
+      <h1>Únete a GastroGuide</h1>
+      <p>Aplica para ser Creador y monetiza tu conocimiento culinario</p>
+    </div>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="auth-form">
+      
+      <div class="form-row">
+        <div class="form-group anime-item">
+          <label>Nombre Completo</label>
+          <input type="text" formControlName="nombre" placeholder="Chef Ramsay"
+                 [class.invalid]="registerForm.controls.nombre.invalid && registerForm.controls.nombre.touched">
+        </div>
+        <div class="form-group anime-item">
+          <label>Correo Electrónico</label>
+          <input type="email" formControlName="email" placeholder="correo@ejemplo.com"
+                 [class.invalid]="registerForm.controls.email.invalid && registerForm.controls.email.touched">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group anime-item">
+          <label>Especialidad</label>
+          <input type="text" formControlName="especialidad" placeholder="Ej: Pastelería Francesa"
+                 [class.invalid]="registerForm.controls.especialidad.invalid && registerForm.controls.especialidad.touched">
+        </div>
+        <div class="form-group anime-item">
+          <label>Años de Experiencia</label>
+          <input type="number" formControlName="experiencia" placeholder="Ej: 5"
+                 [class.invalid]="registerForm.controls.experiencia.invalid && registerForm.controls.experiencia.touched">
+        </div>
+      </div>
+
+      <div class="form-group anime-item">
+        <label>Contraseña Segura</label>
+        <input type="password" formControlName="password" placeholder="Mínimo 8 caracteres"
+               [class.invalid]="registerForm.controls.password.invalid && registerForm.controls.password.touched">
+      </div>
+
+      <div class="form-group anime-item">
+        <label>Biografía Profesional (Resumen de tu trayectoria)</label>
+        <textarea formControlName="descripcion" rows="3" placeholder="Cuéntanos sobre tu experiencia en cocinas o escuelas..."
+                  [class.invalid]="registerForm.controls.descripcion.invalid && registerForm.controls.descripcion.touched"></textarea>
+      </div>
+
+      <button type="submit" class="btn-primary anime-item" [disabled]="isSubmitting()">
+        {{ isSubmitting() ? 'Enviando Solicitud...' : 'Enviar Solicitud a Revisión' }}
+      </button>
+
+    </form>
+
+    <div class="auth-footer anime-item">
+      <p>¿Ya fuiste aprobado por un Administrador?</p>
+      <a routerLink="/auth/login" class="link">Inicia sesión aquí</a>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,157 @@
+/* Contenedor principal que centra la tarjeta en pantalla */
+.auth-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+  background-color: var(--color-bg); /* #F6F7F8 */
+}
+
+/* Tarjeta de registro - Más ancha que el login para acomodar los campos */
+.auth-card {
+  background: var(--color-surface); /* #FFFFFF */
+  padding: 40px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  width: 100%;
+  max-width: 650px; /* Ancho profesional para formularios extensos */
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: 35px;
+
+  h1 {
+    color: var(--color-secondary); /* #012169 */
+    margin: 0 0 10px 0;
+    font-size: 32px;
+    font-weight: 800;
+  }
+
+  p {
+    color: var(--color-text-light);
+    font-size: 15px;
+    max-width: 80%;
+    margin: 0 auto;
+  }
+}
+
+/* Grid para mostrar dos campos por fila en pantallas grandes */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+
+  /* En móviles, se pone una columna sobre otra */
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}
+
+.form-group {
+  margin-bottom: 22px;
+  display: flex;
+  flex-direction: column;
+
+  label {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--color-secondary);
+    margin-bottom: 8px;
+  }
+
+  input, textarea {
+    padding: 14px;
+    border: 1.5px solid #E1E4E8;
+    border-radius: 10px;
+    font-size: 15px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background-color: #FFFFFF;
+    color: var(--color-text);
+
+    &::placeholder {
+      color: #AAB2BD;
+    }
+
+    /* Efecto Focus con tu color azul primario */
+    &:focus {
+      outline: none;
+      border-color: var(--color-primary); /* #009CDE */
+      box-shadow: 0 0 0 4px rgba(0, 156, 222, 0.12);
+      transform: translateY(-1px);
+    }
+
+    /* Estilo para campos inválidos al tocar */
+    &.invalid {
+      border-color: var(--color-error);
+      background-color: #FFF9F9;
+      
+      &:focus {
+        box-shadow: 0 0 0 4px rgba(231, 76, 60, 0.1);
+      }
+    }
+  }
+
+  textarea {
+    resize: none; /* Evita que el usuario deforme el diseño */
+  }
+}
+
+/* Botón de acción principal */
+.btn-primary {
+  width: 100%;
+  padding: 16px;
+  background-color: var(--color-primary); /* #009CDE */
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 15px;
+  box-shadow: 0 4px 12px rgba(0, 156, 222, 0.3);
+
+  &:hover:not([disabled]) {
+    background-color: var(--color-tertiary); /* #003087 */
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 48, 135, 0.4);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &[disabled] {
+    background-color: #BDC3C7;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+}
+
+/* Footer con enlaces */
+.auth-footer {
+  margin-top: 30px;
+  text-align: center;
+  border-top: 1px solid #F1F3F5;
+  padding-top: 20px;
+  font-size: 14px;
+  color: var(--color-text-light);
+
+  .link {
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: 700;
+    margin-left: 5px;
+    transition: color 0.2s;
+
+    &:hover {
+      color: var(--color-secondary);
+      text-decoration: underline;
+    }
+  }
+}

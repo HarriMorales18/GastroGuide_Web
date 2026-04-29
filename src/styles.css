@@ -1,0 +1,25 @@
+:root {
+  /* Paleta oficial de GastroGuide */
+  --color-primary: #009CDE;    /* Azul brillante - Ideal para botones y llamadas a la acción */
+  --color-secondary: #012169;  /* Azul marino muy oscuro - Excelente para títulos y jerarquía */
+  --color-tertiary: #003087;   /* Azul oscuro - Para acentos o estados hover */
+  --color-bg: #F6F7F8;         /* Gris casi blanco - Perfecto para el fondo general de la app */
+  --color-surface: #FFFFFF;    /* Blanco puro - Para las tarjetas de login/registro */
+  
+  /* Colores de soporte */
+  --color-text: #333333;       /* Gris muy oscuro para el texto normal (mejor lectura que el negro puro) */
+  --color-text-light: #7F8C8D; /* Gris medio para subtítulos o placeholders */
+  --color-error: #E74C3C;      /* Rojo para validaciones de error */
+  
+  /* Sombras tintadas con tu azul marino para mayor coherencia visual */
+  --shadow-sm: 0 4px 6px rgba(1, 33, 105, 0.05);
+  --shadow-md: 0 10px 20px rgba(1, 33, 105, 0.08);
+  --radius-md: 12px;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}

@@ -1,6 +1,6 @@
 # 🍳 GastroGuide: Plataforma Educativa de Gastronomía Profesional
 
-![Angular](https://img.shields.io/badge/Framework-Angular%2018%20Standalone-DD0031?style=for-the-badge&logo=angular)
+![Angular](https://img.shields.io/badge/Framework-Angular%2021%20Standalone-DD0031?style=for-the-badge&logo=angular)
 ![TypeScript](https://img.shields.io/badge/Language-TypeScript-3178C6?style=for-the-badge&logo=typescript)
 ![License](https://img.shields.io/badge/Status-Desarrollo%20Senior-009CDE?style=for-the-badge)
 

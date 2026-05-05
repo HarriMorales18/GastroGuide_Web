@@ -8,6 +8,10 @@ export const routes: Routes = [
     path: 'auth', 
     loadChildren: () => import('./features/auth/auth.routes').then(m => m.AUTH_ROUTES) 
   },
+  {
+    path: 'admin/register-admin',
+    loadComponent: () => import('./features/admin/register-admin/register-admin').then(m => m.RegisterAdmin)
+  },
 
   // Rutas protegidas para el Creador
   { 

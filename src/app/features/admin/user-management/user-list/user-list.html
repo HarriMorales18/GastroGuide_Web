@@ -1,1 +1,109 @@
-<p>user-list works!</p>
+<section class="admin-requests">
+	<header class="header">
+		<div>
+			<p class="kicker">Centro de revision</p>
+			<h1>Solicitudes de creadores</h1>
+			<p class="subtitle">Revisa y valida las solicitudes de creacion de cuentas de creador.</p>
+		</div>
+		<div class="summary">
+			<div class="summary-card">
+				<span>Total</span>
+				<strong>{{ totalCount() }}</strong>
+			</div>
+			<div class="summary-card highlight">
+				<span>Pendientes</span>
+				<strong>{{ pendingCount() }}</strong>
+			</div>
+		</div>
+	</header>
+
+	@if (isLoading()) {
+		<div class="state">
+			<div class="spinner"></div>
+			<p>Cargando solicitudes...</p>
+		</div>
+	} @else if (error()) {
+		<div class="state error">
+			<p>{{ error() }}</p>
+			<button class="ghost" type="button" (click)="reload()">Reintentar</button>
+		</div>
+	} @else if (!requests().length) {
+		<div class="state empty">
+			<p>No hay solicitudes por revisar.</p>
+		</div>
+	} @else {
+		<div class="table">
+			<div class="table-row table-head">
+				<span>Solicitante</span>
+				<span>Correo</span>
+				<span>Estado</span>
+				<span>Solicitado</span>
+				<span>Revision</span>
+				<span>Acciones</span>
+			</div>
+
+			@for (item of requests(); track trackById($index, item)) {
+				<div class="table-row">
+					<div>
+						<p class="name">{{ item.creatorFirstName }} {{ item.creatorLastName }}</p>
+						<p class="sub">ID: {{ item.creatorId }}</p>
+					</div>
+					<div>
+						<p class="mono">{{ item.creatorEmail }}</p>
+					</div>
+					<div>
+						<span class="badge" [class.pending]="item.status === 'PENDING'"
+							[class.approved]="item.status === 'APPROVED'"
+							[class.rejected]="item.status === 'REJECTED'">
+							{{ item.status }}
+						</span>
+					</div>
+					<div>
+						<p>{{ item.requestedAt | date: 'medium' }}</p>
+					</div>
+					<div>
+						<p>{{ item.reviewedAt ? (item.reviewedAt | date: 'medium') : 'Sin revisar' }}</p>
+						<p class="sub" *ngIf="item.notes">{{ item.notes }}</p>
+					</div>
+					<div>
+						@if (isPending(item)) {
+							<div class="actions">
+								<button class="action approve" type="button"
+									(click)="approveRequest(item)"
+									[disabled]="isActionBusy()[item.id]">
+									Aprobar
+								</button>
+								<button class="action reject" type="button"
+									(click)="startReject(item)"
+									[disabled]="isActionBusy()[item.id]">
+									Rechazar
+								</button>
+							</div>
+
+							@if (rejectingId() === item.id) {
+								<div class="reject-box">
+									<textarea rows="2" placeholder="Motivo de rechazo"
+										[value]="rejectReason()"
+										(input)="rejectReason.set($any($event.target).value)"></textarea>
+									<div class="actions">
+										<button class="action reject" type="button"
+											(click)="submitReject(item)"
+											[disabled]="isActionBusy()[item.id]">
+											Confirmar rechazo
+										</button>
+										<button class="action ghost" type="button" (click)="cancelReject()">
+											Cancelar
+										</button>
+									</div>
+									<p class="action-error" *ngIf="actionError()">{{ actionError() }}</p>
+								</div>
+							}
+						} @else {
+							<span class="sub">Sin acciones</span>
+						}
+					</div>
+				</div>
+			}
+		</div>
+	}
+</section>

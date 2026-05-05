@@ -1,8 +1,10 @@
-import { Component, AfterViewInit, ElementRef, inject, signal } from '@angular/core';
+import { Component, AfterViewInit, ElementRef, OnInit, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { animate, stagger } from 'animejs';
+import { finalize } from 'rxjs';
+import { AuthService, LoginPayload } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -11,10 +13,11 @@ import { animate, stagger } from 'animejs';
   templateUrl: './login.html',
   styleUrls: ['./login.css']
 })
-export class LoginComponent implements AfterViewInit {
+export class LoginComponent implements AfterViewInit, OnInit {
   private fb = inject(FormBuilder);
   private router = inject(Router);
   private el = inject(ElementRef);
+  private authService = inject(AuthService);
 
   isSubmitting = signal(false);
 
@@ -22,6 +25,24 @@ export class LoginComponent implements AfterViewInit {
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]]
   });
+
+  ngOnInit(): void {
+    const hasToken = this.authService.getAccessToken();
+    if (!hasToken) {
+      return;
+    }
+
+    this.authService.hydrateSessionFromToken();
+    const role = this.authService.userRole();
+
+    if (role === 'ADMIN') {
+      this.router.navigate(['/admin/users']);
+    } else if (role === 'CREATOR') {
+      this.router.navigate(['/creator/courses']);
+    } else {
+      this.router.navigate(['/creator/courses']);
+    }
+  }
 
   ngAfterViewInit() {
     const targets = this.el.nativeElement.querySelectorAll('.anime-item');
@@ -36,17 +57,32 @@ export class LoginComponent implements AfterViewInit {
   }
 
   onSubmit() {
-    if (this.loginForm.valid) {
-      this.isSubmitting.set(true);
-      console.log('Login Data:', this.loginForm.getRawValue());
-      
-      // Simulación de respuesta del backend
-      setTimeout(() => {
-        this.isSubmitting.set(false);
-        this.router.navigate(['/creator']);
-      }, 1500);
-    } else {
+    if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
+      return;
     }
+
+    this.isSubmitting.set(true);
+    const payload = this.loginForm.getRawValue() as LoginPayload;
+
+    this.authService
+      .login(payload)
+      .pipe(finalize(() => this.isSubmitting.set(false)))
+      .subscribe({
+        next: () => {
+          const role = this.authService.userRole();
+          if (role === 'ADMIN') {
+            this.router.navigate(['/admin/users']);
+          } else if (role === 'CREATOR') {
+            this.router.navigate(['/creator/courses']);
+          } else {
+            this.router.navigate(['/creator/courses']);
+          }
+        },
+        error: (error) => {
+          console.error('Error en login:', error);
+          alert('No se pudo iniciar sesion. Verifica tus credenciales.');
+        }
+      });
   }
 }

@@ -3,6 +3,8 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { animate, stagger } from 'animejs';
+import { finalize } from 'rxjs';
+import { AuthService, CreatorRegisterPayload } from '../../services/auth.service';
 
 @Component({
   selector: 'app-creator-register',
@@ -15,16 +17,22 @@ export class CreatorRegisterComponent implements AfterViewInit {
   private fb = inject(FormBuilder);
   private router = inject(Router);
   private el = inject(ElementRef);
+  private authService = inject(AuthService);
 
   isSubmitting = signal(false);
 
   registerForm = this.fb.nonNullable.group({
-    nombre: ['', [Validators.required, Validators.minLength(3)]],
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(8)]],
-    especialidad: ['', Validators.required],
-    experiencia: ['', [Validators.required, Validators.min(1)]],
-    descripcion: ['', [Validators.required, Validators.minLength(50)]]
+    firstName: ['', [Validators.required, Validators.minLength(2)]],
+    lastName: ['', [Validators.required, Validators.minLength(2)]],
+    identificationNumber: ['', [Validators.required, Validators.minLength(5)]],
+    identificationType: ['', Validators.required],
+    nationality: ['', Validators.required],
+    avatarUrl: ['', [Validators.required, Validators.pattern(/^https?:\/\//i)]],
+    phoneNumber: ['', [Validators.required, Validators.minLength(7)]],
+    birthDate: ['', Validators.required],
+    specialization: ['', [Validators.required, Validators.minLength(5)]]
   });
 
   ngAfterViewInit() {
@@ -40,17 +48,26 @@ export class CreatorRegisterComponent implements AfterViewInit {
   }
 
   onSubmit() {
-    if (this.registerForm.valid) {
-      this.isSubmitting.set(true);
-      console.log('Registro Payload:', this.registerForm.getRawValue());
-      
-      setTimeout(() => {
-        this.isSubmitting.set(false);
-        this.router.navigate(['/auth/login']); 
-        alert('Solicitud enviada con éxito. Un administrador revisará tu perfil.');
-      }, 2000);
-    } else {
+    if (this.registerForm.invalid) {
       this.registerForm.markAllAsTouched();
+      return;
     }
+
+    this.isSubmitting.set(true);
+    const payload = this.registerForm.getRawValue() as CreatorRegisterPayload;
+
+    this.authService
+      .createCreator(payload)
+      .pipe(finalize(() => this.isSubmitting.set(false)))
+      .subscribe({
+        next: () => {
+          this.router.navigate(['/auth/login']);
+          alert('Registro enviado con exito. Revisa tu correo para el siguiente paso.');
+        },
+        error: (error) => {
+          console.error('Error al crear el creador:', error);
+          alert('No se pudo completar el registro. Intenta de nuevo.');
+        }
+      });
   }
 }

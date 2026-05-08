@@ -9,6 +9,7 @@ import {
   CourseUpdatePayload,
   LessonCreatePayload,
   ModuleCreatePayload,
+  ModuleUpdatePayload,
   ModuleSummary
 } from '../../../shared/interfaces/course';
 
@@ -37,6 +38,12 @@ export class CreatorService {
 
   createModule(payload: ModuleCreatePayload): Observable<string> {
     return this.http.post(`${environment.apiBaseUrl}/api/modules/create`, payload, {
+      responseType: 'text'
+    });
+  }
+
+  updateModule(payload: ModuleUpdatePayload): Observable<string> {
+    return this.http.patch(`${environment.apiBaseUrl}/api/modules/update`, payload, {
       responseType: 'text'
     });
   }

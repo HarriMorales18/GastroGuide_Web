@@ -25,6 +25,7 @@
 		</div>
 		<div class="action-bar">
 			<button class="primary" type="button" (click)="openModal('module')">Agregar modulos</button>
+			<button class="ghost" type="button" (click)="openModal('module-update')">Actualizar modulo</button>
 			<button class="ghost" type="button" (click)="openModal('lesson')">Agregar lecciones</button>
 		</div>
 	</header>
@@ -320,6 +321,78 @@
 					<div class="edit-actions">
 						<button type="submit" [disabled]="isSubmittingLesson()">
 							{{ isSubmittingLesson() ? 'Guardando...' : 'Crear leccion' }}
+						</button>
+						<button type="button" class="ghost" (click)="closeModal()">Cancelar</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	}
+
+	@if (activeModal() === 'module-update') {
+		<div class="modal" role="dialog" aria-modal="true" aria-labelledby="module-update-modal-title">
+			<div class="modal__backdrop" (click)="closeModal()"></div>
+			<div class="modal__panel modal__panel--module-update" id="course-action-form">
+				<header>
+					<div>
+						<h2 id="module-update-modal-title">Actualizar modulo</h2>
+						<p class="subtitle">Selecciona el modulo y actualiza su informacion.</p>
+					</div>
+					<button type="button" class="ghost" (click)="closeModal()">Cerrar</button>
+				</header>
+
+				<form class="modal__form" [formGroup]="moduleUpdateForm" (ngSubmit)="submitModuleUpdate()">
+					<label class="field">
+						<span>Curso</span>
+						<select formControlName="courseId">
+							<option value="">Selecciona un curso</option>
+							@for (course of courses(); track trackByCourse($index, course)) {
+								<option [value]="course.id">{{ course.title }}</option>
+							}
+						</select>
+					</label>
+
+					<label class="field">
+						<span>Modulo</span>
+						<select formControlName="moduleId" [disabled]="isLoadingModules() || !modules().length">
+							<option value="">
+								@if (isLoadingModules()) { Cargando modulos... } @else { Selecciona un modulo }
+							</option>
+							@for (module of modules(); track $index) {
+								<option [value]="module.id">{{ module.title }}</option>
+							}
+						</select>
+						@if (modulesError()) {
+							<small class="hint">{{ modulesError() }}</small>
+						}
+					</label>
+
+					<label class="field">
+						<span>Titulo del modulo</span>
+						<input type="text" formControlName="title" placeholder="Ej. Introduccion" />
+						@if (moduleUpdateForm.get('title')?.touched && moduleUpdateForm.get('title')?.invalid) {
+							<small>Minimo 3 caracteres.</small>
+						}
+					</label>
+
+					<label class="field field--full">
+						<span>Descripcion</span>
+						<textarea rows="4" formControlName="description"></textarea>
+						@if (moduleUpdateForm.get('description')?.touched && moduleUpdateForm.get('description')?.invalid) {
+							<small>Minimo 5 caracteres.</small>
+						}
+					</label>
+
+					@if (modalSuccess()) {
+						<div class="form-feedback success">{{ modalSuccess() }}</div>
+					}
+					@if (modalError()) {
+						<div class="form-feedback error">{{ modalError() }}</div>
+					}
+
+					<div class="edit-actions">
+						<button type="submit" [disabled]="isSubmittingModuleUpdate()">
+							{{ isSubmittingModuleUpdate() ? 'Actualizando...' : 'Actualizar modulo' }}
 						</button>
 						<button type="button" class="ghost" (click)="closeModal()">Cancelar</button>
 					</div>

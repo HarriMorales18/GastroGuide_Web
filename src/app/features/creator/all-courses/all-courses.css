@@ -330,6 +330,17 @@ h1 {
 	border-radius: 24px 24px 0 0;
 }
 
+.modal__panel--module-update::before {
+	content: '';
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	height: 6px;
+	background: linear-gradient(90deg, var(--accent), var(--accent-dark));
+	border-radius: 24px 24px 0 0;
+}
+
 .modal__panel--lesson {
 	width: min(980px, 100%);
 }

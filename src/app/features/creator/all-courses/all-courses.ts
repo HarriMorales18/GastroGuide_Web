@@ -20,6 +20,7 @@ import {
   DifficultyLevel,
   LessonCreatePayload,
   ModuleCreatePayload,
+  ModuleUpdatePayload,
   ModuleSummary
 } from '../../../shared/interfaces/course';
 import {
@@ -44,6 +45,7 @@ export class AllCourses implements OnInit {
   isLoading = signal(true);
   isSaving = signal(false);
   isSubmittingModule = signal(false);
+  isSubmittingModuleUpdate = signal(false);
   isSubmittingLesson = signal(false);
   error = signal<string | null>(null);
   saveError = signal<string | null>(null);
@@ -52,7 +54,7 @@ export class AllCourses implements OnInit {
   modalSuccess = signal<string | null>(null);
   courses = signal<CourseSummary[]>([]);
   selectedCourse = signal<CourseSummary | null>(null);
-  activeModal = signal<'module' | 'lesson' | null>(null);
+  activeModal = signal<'module' | 'lesson' | 'module-update' | null>(null);
   modules = signal<ModuleSummary[]>([]);
   isLoadingModules = signal(false);
   modulesError = signal<string | null>(null);
@@ -91,6 +93,13 @@ export class AllCourses implements OnInit {
     description: ['', [Validators.required, Validators.minLength(5)]]
   });
 
+  moduleUpdateForm = this.fb.nonNullable.group({
+    courseId: ['', Validators.required],
+    moduleId: ['', Validators.required],
+    title: ['', [Validators.required, Validators.minLength(3)]],
+    description: ['', [Validators.required, Validators.minLength(5)]]
+  });
+
   lessonForm = this.fb.nonNullable.group({
     courseId: ['', Validators.required],
     moduleId: ['', Validators.required],
@@ -115,6 +124,33 @@ export class AllCourses implements OnInit {
           return;
         }
         this.loadModules(value);
+      });
+
+    this.moduleUpdateForm
+      .get('courseId')
+      ?.valueChanges.pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((value) => {
+        this.modules.set([]);
+        this.moduleUpdateForm.patchValue({ moduleId: '', title: '', description: '' });
+        if (!value) {
+          return;
+        }
+        this.loadModules(value);
+      });
+
+    this.moduleUpdateForm
+      .get('moduleId')
+      ?.valueChanges.pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((value) => {
+        const selected = this.modules().find((module) => String(module.id) === String(value));
+        if (!selected) {
+          this.moduleUpdateForm.patchValue({ title: '', description: '' });
+          return;
+        }
+        this.moduleUpdateForm.patchValue({
+          title: selected.title,
+          description: selected.description
+        });
       });
   }
 
@@ -215,7 +251,7 @@ export class AllCourses implements OnInit {
       });
   }
 
-  openModal(type: 'module' | 'lesson'): void {
+  openModal(type: 'module' | 'lesson' | 'module-update'): void {
     this.activeModal.set(type);
     this.modalError.set(null);
     this.modalSuccess.set(null);
@@ -227,7 +263,7 @@ export class AllCourses implements OnInit {
         title: '',
         description: ''
       });
-    } else {
+    } else if (type === 'lesson') {
       this.lessonForm.reset({
         courseId,
         moduleId: '',
@@ -239,6 +275,16 @@ export class AllCourses implements OnInit {
         resourceType: 'PDF_RECIPE',
         fileUrl: ''
       });
+    } else {
+      this.moduleUpdateForm.reset({
+        courseId,
+        moduleId: '',
+        title: '',
+        description: ''
+      });
+      if (courseId) {
+        this.loadModules(courseId);
+      }
     }
     this.scrollToModalForm();
   }
@@ -289,6 +335,42 @@ export class AllCourses implements OnInit {
         },
         error: () => {
           this.modalError.set('No se pudo crear la leccion. Intenta de nuevo.');
+        }
+      });
+  }
+
+  submitModuleUpdate(): void {
+    this.modalError.set(null);
+    this.modalSuccess.set(null);
+    if (this.moduleUpdateForm.invalid) {
+      this.moduleUpdateForm.markAllAsTouched();
+      return;
+    }
+
+    const rawValue = this.moduleUpdateForm.getRawValue();
+    const payload: ModuleUpdatePayload = {
+      id: this.normalizeIdForPayload(rawValue.moduleId),
+      title: rawValue.title,
+      description: rawValue.description
+    };
+
+    this.isSubmittingModuleUpdate.set(true);
+    this.creatorService
+      .updateModule(payload)
+      .pipe(finalize(() => this.isSubmittingModuleUpdate.set(false)))
+      .subscribe({
+        next: () => {
+          this.modules.update((items) =>
+            items.map((item) =>
+              String(item.id) === String(payload.id)
+                ? { ...item, title: payload.title, description: payload.description }
+                : item
+            )
+          );
+          this.modalSuccess.set('Modulo actualizado correctamente.');
+        },
+        error: () => {
+          this.modalError.set('No se pudo actualizar el modulo. Intenta de nuevo.');
         }
       });
   }
@@ -365,5 +447,17 @@ export class AllCourses implements OnInit {
       return value;
     }
     return null;
+  }
+
+  private normalizeIdForPayload(value: number | string): number | string {
+    if (typeof value === 'number') {
+      return value;
+    }
+    const trimmed = value.trim();
+    if (!trimmed) {
+      return value;
+    }
+    const numeric = Number(trimmed);
+    return Number.isNaN(numeric) ? value : numeric;
   }
 }

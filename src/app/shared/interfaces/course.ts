@@ -64,6 +64,12 @@ export interface ModuleCreatePayload {
 	description: string;
 }
 
+export interface ModuleUpdatePayload {
+	id: number | string;
+	title: string;
+	description: string;
+}
+
 export interface LessonCreatePayload {
 	moduleId: number | string;
 	title: string;

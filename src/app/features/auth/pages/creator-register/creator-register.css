@@ -1,125 +1,224 @@
-/* Contenedor principal que centra la tarjeta en pantalla */
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600;700;800&display=swap');
+
 .auth-container {
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 40px 20px;
-  background-color: var(--color-bg); /* #F6F7F8 */
+  padding: 32px;
+  background: radial-gradient(1200px 600px at 10% 10%, rgba(0, 156, 222, 0.12), transparent 60%),
+    radial-gradient(900px 500px at 90% 20%, rgba(1, 33, 105, 0.12), transparent 60%),
+    var(--color-bg);
+  position: relative;
+  overflow: hidden;
+  font-family: 'Manrope', 'Segoe UI', sans-serif;
 }
 
-/* Tarjeta de registro - Más ancha que el login para acomodar los campos */
+.auth-container::before,
+.auth-container::after {
+  content: '';
+  position: absolute;
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(0, 156, 222, 0.18), rgba(1, 33, 105, 0.05));
+  filter: blur(0.5px);
+  z-index: 0;
+}
+
+.auth-container::before {
+  top: -80px;
+  right: -120px;
+}
+
+.auth-container::after {
+  bottom: -120px;
+  left: -100px;
+}
+
 .auth-card {
-  background: var(--color-surface); /* #FFFFFF */
-  padding: 40px;
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-md);
-  width: 100%;
-  max-width: 650px; /* Ancho profesional para formularios extensos */
+  background: var(--color-surface);
+  border-radius: calc(var(--radius-md) + 6px);
+  box-shadow: 0 24px 60px rgba(1, 33, 105, 0.18);
+  width: min(1100px, 100%);
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.25fr);
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+}
+
+.auth-card--split {
+  border: 1px solid rgba(1, 33, 105, 0.08);
+}
+
+.auth-visual {
+  padding: 42px;
+  color: var(--color-surface);
+  background: linear-gradient(160deg, var(--color-primary), var(--color-tertiary) 55%, var(--color-secondary));
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 32px;
+}
+
+.auth-visual__top {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.brand-badge {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.18);
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.brand-text h1 {
+  margin: 0;
+  font-size: 28px;
+  letter-spacing: -0.6px;
+}
+
+.brand-text p {
+  margin: 4px 0 0 0;
+  font-size: 13px;
+  opacity: 0.85;
+}
+
+.auth-visual__content h2 {
+  margin: 0 0 12px 0;
+  font-size: 26px;
+  line-height: 1.25;
+  letter-spacing: -0.4px;
+}
+
+.auth-visual__content p {
+  margin: 0 0 18px 0;
+  opacity: 0.88;
+  font-size: 15px;
+}
+
+.pill-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.pill {
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.auth-visual__footer {
+  font-size: 12px;
+  letter-spacing: 0.4px;
+  opacity: 0.8;
+  text-transform: uppercase;
+}
+
+.auth-form-panel {
+  padding: 42px 48px;
+  background: var(--color-surface);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .auth-header {
-  text-align: center;
-  margin-bottom: 35px;
-
-  h1 {
-    color: var(--color-secondary); /* #012169 */
-    margin: 0 0 10px 0;
-    font-size: 32px;
-    font-weight: 800;
-  }
-
-  p {
-    color: var(--color-text-light);
-    font-size: 15px;
-    max-width: 80%;
-    margin: 0 auto;
-  }
+  margin-bottom: 26px;
 }
 
-/* Grid para mostrar dos campos por fila en pantallas grandes */
+.auth-header h2 {
+  color: var(--color-secondary);
+  margin: 0 0 8px 0;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.auth-header p {
+  color: var(--color-text-light);
+  margin: 0;
+  font-size: 14px;
+}
+
 .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  gap: 18px;
 
-  /* En móviles, se pone una columna sobre otra */
-  @media (max-width: 600px) {
+  @media (max-width: 700px) {
     grid-template-columns: 1fr;
-    gap: 0;
   }
 }
 
 .form-group {
-  margin-bottom: 22px;
+  margin-bottom: 16px;
   display: flex;
   flex-direction: column;
 
   label {
     font-size: 13px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    font-weight: 600;
     color: var(--color-secondary);
     margin-bottom: 8px;
   }
 
-  input, textarea {
-    padding: 14px;
-    border: 1.5px solid #E1E4E8;
+  input, select {
+    padding: 13px 15px;
+    border: 1px solid rgba(1, 33, 105, 0.18);
     border-radius: 10px;
-    font-size: 15px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    background-color: #FFFFFF;
+    font-size: 14px;
+    transition: all 0.25s ease;
+    background-color: #f9fbfc;
+    font-family: inherit;
     color: var(--color-text);
 
     &::placeholder {
-      color: #AAB2BD;
+      color: #9aa5b1;
     }
 
-    /* Efecto Focus con tu color azul primario */
     &:focus {
       outline: none;
-      border-color: var(--color-primary); /* #009CDE */
-      box-shadow: 0 0 0 4px rgba(0, 156, 222, 0.12);
-      transform: translateY(-1px);
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(0, 156, 222, 0.15);
+      background-color: var(--color-surface);
     }
 
-    /* Estilo para campos inválidos al tocar */
     &.invalid {
       border-color: var(--color-error);
-      background-color: #FFF9F9;
-      
-      &:focus {
-        box-shadow: 0 0 0 4px rgba(231, 76, 60, 0.1);
-      }
+      background-color: #fdf5f5;
     }
-  }
-
-  textarea {
-    resize: none; /* Evita que el usuario deforme el diseño */
   }
 }
 
-/* Botón de acción principal */
 .btn-primary {
   width: 100%;
-  padding: 16px;
-  background-color: var(--color-primary); /* #009CDE */
-  color: white;
+  padding: 14px;
+  background-color: var(--color-primary);
+  color: var(--color-surface);
   border: none;
   border-radius: 12px;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.3s ease;
-  margin-top: 15px;
-  box-shadow: 0 4px 12px rgba(0, 156, 222, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  margin-top: 8px;
+  box-shadow: 0 12px 20px rgba(0, 156, 222, 0.2);
 
   &:hover:not([disabled]) {
-    background-color: var(--color-tertiary); /* #003087 */
+    background-color: var(--color-tertiary);
     transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(0, 48, 135, 0.4);
   }
 
   &:active {
@@ -127,31 +226,58 @@
   }
 
   &[disabled] {
-    background-color: #BDC3C7;
+    opacity: 0.7;
     cursor: not-allowed;
     box-shadow: none;
   }
 }
 
-/* Footer con enlaces */
 .auth-footer {
-  margin-top: 30px;
-  text-align: center;
-  border-top: 1px solid #F1F3F5;
-  padding-top: 20px;
-  font-size: 14px;
+  margin-top: 22px;
+  text-align: left;
+  border-top: 1px solid #edf0f3;
+  padding-top: 18px;
+  font-size: 13px;
   color: var(--color-text-light);
 
   .link {
     color: var(--color-primary);
     text-decoration: none;
-    font-weight: 700;
+    font-weight: 600;
     margin-left: 5px;
     transition: color 0.2s;
 
     &:hover {
-      color: var(--color-secondary);
+      color: var(--color-tertiary);
       text-decoration: underline;
     }
+  }
+}
+
+@media (max-width: 980px) {
+  .auth-card {
+    grid-template-columns: 1fr;
+  }
+
+  .auth-visual {
+    padding: 32px;
+  }
+
+  .auth-form-panel {
+    padding: 32px;
+  }
+}
+
+@media (max-width: 600px) {
+  .auth-container {
+    padding: 18px;
+  }
+
+  .auth-visual__content h2 {
+    font-size: 22px;
+  }
+
+  .auth-form-panel {
+    padding: 26px 20px;
   }
 }

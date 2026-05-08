@@ -1,6 +1,6 @@
 <section class="admin-requests">
 	<header class="header">
-		<div>
+		<div class="header-text">
 			<p class="kicker">Centro de revision</p>
 			<h1>Solicitudes de creadores</h1>
 			<p class="subtitle">Revisa y valida las solicitudes de creacion de cuentas de creador.</p>
@@ -44,28 +44,28 @@
 
 			@for (item of requests(); track trackById($index, item)) {
 				<div class="table-row">
-					<div>
+					<div class="cell" data-label="Solicitante">
 						<p class="name">{{ item.creatorFirstName }} {{ item.creatorLastName }}</p>
 						<p class="sub">ID: {{ item.creatorId }}</p>
 					</div>
-					<div>
+					<div class="cell" data-label="Correo">
 						<p class="mono">{{ item.creatorEmail }}</p>
 					</div>
-					<div>
+					<div class="cell" data-label="Estado">
 						<span class="badge" [class.pending]="item.status === 'PENDING'"
 							[class.approved]="item.status === 'APPROVED'"
 							[class.rejected]="item.status === 'REJECTED'">
 							{{ item.status }}
 						</span>
 					</div>
-					<div>
+					<div class="cell" data-label="Solicitado">
 						<p>{{ item.requestedAt | date: 'medium' }}</p>
 					</div>
-					<div>
+					<div class="cell" data-label="Revision">
 						<p>{{ item.reviewedAt ? (item.reviewedAt | date: 'medium') : 'Sin revisar' }}</p>
 						<p class="sub" *ngIf="item.notes">{{ item.notes }}</p>
 					</div>
-					<div>
+					<div class="cell" data-label="Acciones">
 						@if (isPending(item)) {
 							<div class="actions">
 								<button class="action approve" type="button"

@@ -1,21 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
 :root {
-	--ink: #1b1f23;
-	--muted: #5f6b7a;
-	--panel: #f8f4ef;
-	--panel-strong: #f1e6d6;
-	--accent: #da5d3d;
-	--accent-dark: #b4462b;
+	--ink: var(--color-secondary);
+	--muted: var(--color-text-light);
+	--panel: #f3f6fb;
+	--panel-strong: #e3effa;
+	--accent: var(--color-primary);
+	--accent-dark: var(--color-tertiary);
 	--success: #1e8f63;
 	--warning: #f59f00;
-	--danger: #d64550;
+	--danger: var(--color-error);
 }
 
 .admin-users {
 	min-height: 100vh;
 	padding: clamp(2rem, 4vw, 4rem);
-	background: radial-gradient(circle at top left, #f9efe1 0%, #fefbf6 45%, #f6f0e8 100%);
+	background: radial-gradient(circle at top left, rgba(0, 156, 222, 0.12) 0%, rgba(246, 247, 248, 0.95) 45%, rgba(1, 33, 105, 0.05) 100%);
 	color: var(--ink);
 	font-family: 'Space Grotesk', 'Segoe UI', sans-serif;
 	animation: fadeIn 0.6s ease-out;
@@ -30,11 +30,15 @@
 	margin-bottom: 2.5rem;
 }
 
+.header-text {
+	max-width: 38rem;
+}
+
 .kicker {
 	text-transform: uppercase;
 	letter-spacing: 0.2em;
 	font-size: 0.7rem;
-	color: var(--muted);
+	color: var(--accent-dark);
 	margin: 0 0 0.6rem;
 }
 
@@ -60,7 +64,7 @@ h1 {
 	background: #ffffff;
 	border-radius: 18px;
 	padding: 1rem 1.4rem;
-	box-shadow: 0 20px 40px -30px rgba(27, 31, 35, 0.5);
+	box-shadow: 0 20px 40px -30px rgba(1, 33, 105, 0.35);
 	display: grid;
 	gap: 0.4rem;
 	min-width: 140px;
@@ -76,20 +80,26 @@ h1 {
 }
 
 .summary-card.highlight {
-	background: linear-gradient(135deg, var(--accent), #f47a5e);
+	background: linear-gradient(135deg, #007bb3, #003087);
 	color: #ffffff;
+	box-shadow: 0 16px 32px -20px rgba(0, 48, 135, 0.7);
 }
 
 .summary-card.highlight span {
-	color: rgba(255, 255, 255, 0.8);
+	color: rgba(255, 255, 255, 0.92);
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.summary-card.highlight strong {
+	text-shadow: 0 2px 6px rgba(0, 0, 0, 0.28);
 }
 
 .table {
 	background: #ffffff;
 	border-radius: 22px;
 	padding: 1rem 1.6rem;
-	box-shadow: 0 22px 60px -45px rgba(27, 31, 35, 0.6);
-	border: 1px solid rgba(218, 93, 61, 0.08);
+	box-shadow: 0 22px 60px -45px rgba(1, 33, 105, 0.45);
+	border: 1px solid rgba(0, 156, 222, 0.08);
 }
 
 .table-row {
@@ -98,7 +108,7 @@ h1 {
 	align-items: center;
 	gap: 1rem;
 	padding: 1rem 0.2rem;
-	border-bottom: 1px solid rgba(27, 31, 35, 0.08);
+	border-bottom: 1px solid rgba(1, 33, 105, 0.08);
 	animation: slideUp 0.4s ease both;
 }
 
@@ -114,6 +124,11 @@ h1 {
 	padding-top: 0.8rem;
 }
 
+.cell {
+	display: grid;
+	gap: 0.15rem;
+}
+
 .mono {
 	font-family: 'Space Grotesk', 'Segoe UI', sans-serif;
 	font-weight: 500;
@@ -123,12 +138,14 @@ h1 {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	padding: 0.3rem 0.8rem;
+	padding: 0.25rem 0.7rem;
 	border-radius: 999px;
 	font-weight: 600;
 	font-size: 0.75rem;
-	background: rgba(27, 31, 35, 0.08);
+	background: rgba(1, 33, 105, 0.08);
 	color: var(--ink);
+	width: fit-content;
+	max-width: 160px;
 }
 
 .badge.active {
@@ -158,7 +175,7 @@ h1 {
 	display: grid;
 	place-items: center;
 	gap: 0.8rem;
-	box-shadow: 0 18px 50px -40px rgba(27, 31, 35, 0.6);
+	box-shadow: 0 18px 50px -40px rgba(1, 33, 105, 0.45);
 }
 
 .state.error {
@@ -172,7 +189,7 @@ h1 {
 .spinner {
 	width: 36px;
 	height: 36px;
-	border: 4px solid rgba(218, 93, 61, 0.2);
+	border: 4px solid rgba(0, 156, 222, 0.2);
 	border-top-color: var(--accent);
 	border-radius: 50%;
 	animation: spin 1s linear infinite;
@@ -219,11 +236,28 @@ h1 {
 @media (max-width: 900px) {
 	.table-row {
 		grid-template-columns: 1fr;
+		gap: 0.6rem;
 		padding: 1rem 0;
 	}
 
 	.table-head {
 		display: none;
+	}
+
+	.cell {
+		position: relative;
+		padding-left: 7.5rem;
+	}
+
+	.cell::before {
+		content: attr(data-label);
+		position: absolute;
+		left: 0;
+		top: 0;
+		font-size: 0.7rem;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--muted);
 	}
 
 	.summary {
@@ -232,5 +266,28 @@ h1 {
 
 	.summary-card {
 		flex: 1;
+	}
+}
+
+@media (max-width: 600px) {
+	.admin-users {
+		padding: 1.5rem;
+	}
+
+	.summary {
+		flex-direction: column;
+	}
+
+	.table {
+		padding: 1rem;
+	}
+
+	.cell {
+		padding-left: 0;
+	}
+
+	.cell::before {
+		position: static;
+		margin-bottom: 0.2rem;
 	}
 }

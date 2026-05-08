@@ -1,9 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600;700;800&family=Playfair+Display:wght@600;700&display=swap');
+
 .course-manager {
 	padding: 32px 28px 48px;
-	background: radial-gradient(circle at top, #fff7eb, #f9f2e8 45%, #f5e9dc 100%);
+	background: radial-gradient(circle at top left, rgba(0, 156, 222, 0.12), rgba(246, 247, 248, 0.95) 45%, rgba(1, 33, 105, 0.05) 100%);
 	min-height: calc(100vh - 64px);
-	color: #1f1b16;
-	font-family: 'Playfair Display', 'Georgia', serif;
+	color: var(--color-secondary);
+	font-family: 'Manrope', 'Segoe UI', sans-serif;
 }
 
 .course-manager__header {
@@ -17,32 +19,34 @@
 	margin: 6px 0 8px;
 	font-size: clamp(2rem, 3vw, 2.8rem);
 	letter-spacing: 0.5px;
+	font-family: 'Playfair Display', 'Georgia', serif;
+	color: var(--color-secondary);
 }
 
 .eyebrow {
 	text-transform: uppercase;
 	font-size: 0.75rem;
 	letter-spacing: 2px;
-	color: #b56b2a;
+	color: var(--color-tertiary);
 	margin: 0;
-	font-family: 'Fira Sans', 'Segoe UI', sans-serif;
+	font-family: 'Manrope', 'Segoe UI', sans-serif;
 }
 
 .subtitle {
 	margin: 0;
 	font-size: 1rem;
 	max-width: 520px;
-	color: #5a4635;
-	font-family: 'Fira Sans', 'Segoe UI', sans-serif;
+	color: var(--color-text-light);
+	font-family: 'Manrope', 'Segoe UI', sans-serif;
 }
 
 .course-form {
 	background: #ffffff;
 	padding: 28px;
 	border-radius: 18px;
-	box-shadow: 0 20px 40px rgba(79, 53, 34, 0.12);
-	border: 1px solid rgba(181, 107, 42, 0.2);
-	font-family: 'Fira Sans', 'Segoe UI', sans-serif;
+	box-shadow: 0 20px 40px rgba(1, 33, 105, 0.12);
+	border: 1px solid rgba(0, 156, 222, 0.16);
+	font-family: 'Manrope', 'Segoe UI', sans-serif;
 }
 
 .course-form__grid {
@@ -60,29 +64,33 @@
 
 .field span {
 	font-weight: 600;
-	color: #3a2a1c;
+	color: var(--color-secondary);
 }
 
 .field input,
 .field textarea,
 .field select {
 	border-radius: 12px;
-	border: 1px solid rgba(79, 53, 34, 0.2);
+	border: 1px solid rgba(1, 33, 105, 0.18);
 	padding: 12px 14px;
 	font-size: 0.95rem;
-	background: #fffdf9;
-	color: #2d2118;
+	background: #f9fbfc;
+	color: var(--color-text);
+}
+
+.field textarea {
+	resize: none;
 }
 
 .field input:focus,
 .field textarea:focus,
 .field select:focus {
-	outline: 2px solid rgba(181, 107, 42, 0.35);
-	border-color: rgba(181, 107, 42, 0.6);
+	outline: 2px solid rgba(0, 156, 222, 0.25);
+	border-color: rgba(0, 156, 222, 0.6);
 }
 
 .field small {
-	color: #b24535;
+	color: var(--color-error);
 	font-size: 0.8rem;
 }
 
@@ -97,7 +105,7 @@
 }
 
 .course-form__actions button {
-	background: #b56b2a;
+	background: linear-gradient(135deg, var(--color-primary), var(--color-tertiary));
 	color: #fff;
 	border: none;
 	padding: 12px 28px;
@@ -114,7 +122,7 @@
 
 .course-form__actions button:hover:not(:disabled) {
 	transform: translateY(-1px);
-	box-shadow: 0 12px 24px rgba(181, 107, 42, 0.25);
+	box-shadow: 0 12px 24px rgba(0, 48, 135, 0.25);
 }
 
 .form-feedback {
@@ -122,12 +130,12 @@
 }
 
 .form-feedback__success {
-	color: #2f7a3a;
+	color: #1e8f63;
 	font-weight: 600;
 }
 
 .form-feedback__error {
-	color: #b24535;
+	color: var(--color-error);
 	font-weight: 600;
 }
 

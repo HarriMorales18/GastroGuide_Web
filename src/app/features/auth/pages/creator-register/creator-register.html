@@ -1,99 +1,121 @@
 <div class="auth-container">
-  <div class="auth-card register-card anime-item">
-    
-    <div class="auth-header anime-item">
-      <h1>Únete a GastroGuide</h1>
-      <p>Aplica para ser Creador y monetiza tu conocimiento culinario</p>
-    </div>
-
-    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="auth-form">
-
-      <div class="form-row">
-        <div class="form-group anime-item">
-          <label>Nombre</label>
-          <input type="text" formControlName="firstName" placeholder="Juan"
-                 [class.invalid]="registerForm.controls.firstName.invalid && registerForm.controls.firstName.touched">
-        </div>
-        <div class="form-group anime-item">
-          <label>Apellido</label>
-          <input type="text" formControlName="lastName" placeholder="Perez"
-                 [class.invalid]="registerForm.controls.lastName.invalid && registerForm.controls.lastName.touched">
+  <div class="auth-card auth-card--split register-card anime-item">
+    <section class="auth-visual">
+      <div class="auth-visual__top">
+        <div class="brand-badge">GG</div>
+        <div class="brand-text">
+          <h1>GastroGuide</h1>
+          <p>Programa oficial de creadores</p>
         </div>
       </div>
 
-      <div class="form-row">
-        <div class="form-group anime-item">
-          <label>Correo Electronico</label>
-          <input type="email" formControlName="email" placeholder="creator@gastro.com"
-                 [class.invalid]="registerForm.controls.email.invalid && registerForm.controls.email.touched">
-        </div>
-        <div class="form-group anime-item">
-          <label>Telefono</label>
-          <input type="tel" formControlName="phoneNumber" placeholder="+1234567890"
-                 [class.invalid]="registerForm.controls.phoneNumber.invalid && registerForm.controls.phoneNumber.touched">
+      <div class="auth-visual__content">
+        <h2>Transforma tu pasion en una comunidad rentable.</h2>
+        <p>Comparte recetas, crea cursos premium y crece con herramientas pensadas para chefs profesionales.</p>
+        <div class="pill-row">
+          <span class="pill">Revision rapida</span>
+          <span class="pill">Cobros internacionales</span>
+          <span class="pill">Panel de crecimiento</span>
         </div>
       </div>
 
-      <div class="form-row">
-        <div class="form-group anime-item">
-          <label>Contrasena</label>
-          <input type="password" formControlName="password" placeholder="Minimo 8 caracteres"
-                 [class.invalid]="registerForm.controls.password.invalid && registerForm.controls.password.touched">
-        </div>
-        <div class="form-group anime-item">
-          <label>Fecha de Nacimiento</label>
-          <input type="date" formControlName="birthDate"
-                 [class.invalid]="registerForm.controls.birthDate.invalid && registerForm.controls.birthDate.touched">
-        </div>
+      <div class="auth-visual__footer">
+        <span>Tu talento, nuestra plataforma</span>
+      </div>
+    </section>
+
+    <section class="auth-form-panel">
+      <div class="auth-header anime-item">
+        <h2>Postulacion de Creador</h2>
+        <p>Completa los datos y revisaremos tu solicitud.</p>
       </div>
 
-      <div class="form-row">
-        <div class="form-group anime-item">
-          <label>Tipo de Identificacion</label>
-          <select formControlName="identificationType"
-                  [class.invalid]="registerForm.controls.identificationType.invalid && registerForm.controls.identificationType.touched">
-            <option value="">Selecciona</option>
-            <option value="CC">CC</option>
-            <option value="CE">CE</option>
-            <option value="PAS">PAS</option>
-          </select>
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="auth-form">
+        <div class="form-row">
+          <div class="form-group anime-item">
+            <label>Nombre</label>
+            <input type="text" formControlName="firstName" placeholder="Juan"
+                   [class.invalid]="registerForm.controls.firstName.invalid && registerForm.controls.firstName.touched">
+          </div>
+          <div class="form-group anime-item">
+            <label>Apellido</label>
+            <input type="text" formControlName="lastName" placeholder="Perez"
+                   [class.invalid]="registerForm.controls.lastName.invalid && registerForm.controls.lastName.touched">
+          </div>
         </div>
-        <div class="form-group anime-item">
-          <label>Numero de Identificacion</label>
-          <input type="text" formControlName="identificationNumber" placeholder="123456789"
-                 [class.invalid]="registerForm.controls.identificationNumber.invalid && registerForm.controls.identificationNumber.touched">
+
+        <div class="form-row">
+          <div class="form-group anime-item">
+            <label>Correo Electronico</label>
+            <input type="email" formControlName="email" placeholder="creator@gastro.com"
+                   [class.invalid]="registerForm.controls.email.invalid && registerForm.controls.email.touched">
+          </div>
+          <div class="form-group anime-item">
+            <label>Telefono</label>
+            <input type="tel" formControlName="phoneNumber" placeholder="+1234567890"
+                   [class.invalid]="registerForm.controls.phoneNumber.invalid && registerForm.controls.phoneNumber.touched">
+          </div>
         </div>
+
+        <div class="form-row">
+          <div class="form-group anime-item">
+            <label>Contrasena</label>
+            <input type="password" formControlName="password" placeholder="Minimo 8 caracteres"
+                   [class.invalid]="registerForm.controls.password.invalid && registerForm.controls.password.touched">
+          </div>
+          <div class="form-group anime-item">
+            <label>Fecha de Nacimiento</label>
+            <input type="date" formControlName="birthDate"
+                   [class.invalid]="registerForm.controls.birthDate.invalid && registerForm.controls.birthDate.touched">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group anime-item">
+            <label>Tipo de Identificacion</label>
+            <select formControlName="identificationType"
+                    [class.invalid]="registerForm.controls.identificationType.invalid && registerForm.controls.identificationType.touched">
+              <option value="">Selecciona</option>
+              <option value="CC">CC</option>
+              <option value="CE">CE</option>
+              <option value="PAS">PAS</option>
+            </select>
+          </div>
+          <div class="form-group anime-item">
+            <label>Numero de Identificacion</label>
+            <input type="text" formControlName="identificationNumber" placeholder="123456789"
+                   [class.invalid]="registerForm.controls.identificationNumber.invalid && registerForm.controls.identificationNumber.touched">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group anime-item">
+            <label>Nacionalidad</label>
+            <input type="text" formControlName="nationality" placeholder="Colombiana"
+                   [class.invalid]="registerForm.controls.nationality.invalid && registerForm.controls.nationality.touched">
+          </div>
+          <div class="form-group anime-item">
+            <label>Avatar (URL)</label>
+            <input type="url" formControlName="avatarUrl" placeholder="https://example.com/avatar.jpg"
+                   [class.invalid]="registerForm.controls.avatarUrl.invalid && registerForm.controls.avatarUrl.touched">
+          </div>
+        </div>
+
+        <div class="form-group anime-item">
+          <label>Especializacion</label>
+          <input type="text" formControlName="specialization" placeholder="Experto en comida italiana"
+                 [class.invalid]="registerForm.controls.specialization.invalid && registerForm.controls.specialization.touched">
+        </div>
+
+        <button type="submit" class="btn-primary anime-item" [disabled]="isSubmitting()">
+          {{ isSubmitting() ? 'Enviando...' : 'Crear Cuenta de Creador' }}
+        </button>
+      </form>
+
+      <div class="auth-footer anime-item">
+        <p>¿Ya fuiste aprobado por un Administrador?</p>
+        <a routerLink="/auth/login" class="link">Inicia sesión aquí</a>
       </div>
-
-      <div class="form-row">
-        <div class="form-group anime-item">
-          <label>Nacionalidad</label>
-          <input type="text" formControlName="nationality" placeholder="Colombiana"
-                 [class.invalid]="registerForm.controls.nationality.invalid && registerForm.controls.nationality.touched">
-        </div>
-        <div class="form-group anime-item">
-          <label>Avatar (URL)</label>
-          <input type="url" formControlName="avatarUrl" placeholder="https://example.com/avatar.jpg"
-                 [class.invalid]="registerForm.controls.avatarUrl.invalid && registerForm.controls.avatarUrl.touched">
-        </div>
-      </div>
-
-      <div class="form-group anime-item">
-        <label>Especializacion</label>
-        <input type="text" formControlName="specialization" placeholder="Experto en comida italiana"
-               [class.invalid]="registerForm.controls.specialization.invalid && registerForm.controls.specialization.touched">
-      </div>
-
-      <button type="submit" class="btn-primary anime-item" [disabled]="isSubmitting()">
-        {{ isSubmitting() ? 'Enviando...' : 'Crear Cuenta de Creador' }}
-      </button>
-
-    </form>
-
-    <div class="auth-footer anime-item">
-      <p>¿Ya fuiste aprobado por un Administrador?</p>
-      <a routerLink="/auth/login" class="link">Inicia sesión aquí</a>
-    </div>
-
+    </section>
   </div>
 </div>

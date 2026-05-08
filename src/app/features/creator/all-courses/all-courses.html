@@ -1,24 +1,24 @@
 <section class="creator-courses">
 	<header class="header">
-		<div>
+		<div class="header-text">
 			<p class="kicker">Panel de creador</p>
 			<h1>Cursos creados</h1>
 			<p class="subtitle">Gestiona los cursos creados y revisa su informacion principal.</p>
 		</div>
 		<div class="summary">
-			<div class="summary-card">
+			<div class="summary-card summary-card--total">
 				<span>Total</span>
 				<strong>{{ totalCount() }}</strong>
 			</div>
-			<div class="summary-card highlight">
+			<div class="summary-card summary-card--beginner">
 				<span>Principiante</span>
 				<strong>{{ beginnerCount() }}</strong>
 			</div>
-			<div class="summary-card">
+			<div class="summary-card summary-card--intermediate">
 				<span>Intermedio</span>
 				<strong>{{ intermediateCount() }}</strong>
 			</div>
-			<div class="summary-card">
+			<div class="summary-card summary-card--advanced">
 				<span>Avanzado</span>
 				<strong>{{ advancedCount() }}</strong>
 			</div>
@@ -54,11 +54,11 @@
 
 			@for (course of courses(); track trackByCourse($index, course)) {
 				<button class="table-row" type="button" (click)="selectCourse(course)">
-					<div>
+					<div class="cell" data-label="Curso">
 						<p class="title">{{ course.title }}</p>
 						<p class="description">{{ course.description }}</p>
 					</div>
-					<div>
+					<div class="cell" data-label="Nivel">
 						<span
 							class="badge"
 							[class.beginner]="course.difficultyLevel === 'BEGINNER'"
@@ -68,10 +68,10 @@
 							{{ course.difficultyLevel }}
 						</span>
 					</div>
-					<div>
+					<div class="cell" data-label="Categoria">
 						<span class="tag">{{ course.category }}</span>
 					</div>
-					<div>
+					<div class="cell" data-label="Tipo de cocina">
 						<span class="tag">{{ course.cuisineType }}</span>
 					</div>
 				</button>
@@ -172,7 +172,7 @@
 	@if (activeModal() === 'module') {
 		<div class="modal" role="dialog" aria-modal="true" aria-labelledby="module-modal-title">
 			<div class="modal__backdrop" (click)="closeModal()"></div>
-			<div class="modal__panel" id="course-action-form">
+			<div class="modal__panel modal__panel--module" id="course-action-form">
 				<header>
 					<div>
 						<h2 id="module-modal-title">Agregar modulo</h2>
@@ -229,7 +229,7 @@
 	@if (activeModal() === 'lesson') {
 		<div class="modal" role="dialog" aria-modal="true" aria-labelledby="lesson-modal-title">
 			<div class="modal__backdrop" (click)="closeModal()"></div>
-			<div class="modal__panel" id="course-action-form">
+			<div class="modal__panel modal__panel--lesson" id="course-action-form">
 				<header>
 					<div>
 						<h2 id="lesson-modal-title">Agregar leccion</h2>
@@ -239,7 +239,7 @@
 				</header>
 
 				<form class="modal__form" [formGroup]="lessonForm" (ngSubmit)="submitLesson()">
-					<label class="field">
+					<label class="field field--left">
 						<span>Curso</span>
 						<select formControlName="courseId">
 							<option value="">Selecciona un curso</option>
@@ -249,7 +249,7 @@
 						</select>
 					</label>
 
-					<label class="field">
+					<label class="field field--right">
 						<span>Modulo</span>
 						<select formControlName="moduleId" [disabled]="isLoadingModules() || !modules().length">
 							<option value="">
@@ -264,17 +264,12 @@
 						}
 					</label>
 
-					<label class="field">
+					<label class="field field--left">
 						<span>Titulo de leccion</span>
 						<input type="text" formControlName="title" placeholder="Ej. Mise en place" />
 					</label>
 
-					<label class="field field--full">
-						<span>Descripcion</span>
-						<textarea rows="3" formControlName="description"></textarea>
-					</label>
-
-					<label class="field">
+					<label class="field field--right">
 						<span>Tipo de leccion</span>
 						<select formControlName="lessonType">
 							@for (type of lessonTypeOptions; track $index) {
@@ -283,7 +278,12 @@
 						</select>
 					</label>
 
-					<div class="field field--full checkbox">
+					<label class="field field--left">
+						<span>Descripcion</span>
+						<textarea rows="3" formControlName="description"></textarea>
+					</label>
+
+					<div class="field field--right checkbox">
 						<span>Vista previa gratis</span>
 						<label class="checkbox__control">
 							<input type="checkbox" formControlName="isFreePreview" />
@@ -291,12 +291,12 @@
 						</label>
 					</div>
 
-					<label class="field">
+					<label class="field field--left">
 						<span>URL de video</span>
 						<input type="url" formControlName="videoUrl" placeholder="https://" />
 					</label>
 
-					<label class="field">
+					<label class="field field--right">
 						<span>Tipo de recurso</span>
 						<select formControlName="resourceType">
 							@for (type of resourceTypeOptions; track $index) {

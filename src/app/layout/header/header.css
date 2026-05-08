@@ -7,6 +7,7 @@
 	--header-accent: var(--color-primary);
 	--header-accent-dark: var(--color-tertiary);
 	--header-border: rgba(1, 33, 105, 0.12);
+	--header-surface: rgba(255, 255, 255, 0.86);
 }
 
 .app-header {
@@ -18,20 +19,39 @@
 	justify-content: space-between;
 	gap: 2rem;
 	padding: 1rem clamp(1.5rem, 4vw, 3rem);
-	background: var(--header-bg);
-	backdrop-filter: blur(12px);
+	background: linear-gradient(135deg, var(--header-surface), rgba(246, 247, 248, 0.9));
+	backdrop-filter: blur(16px);
 	border-bottom: 1px solid var(--header-border);
 	font-family: 'Space Grotesk', 'Segoe UI', sans-serif;
 }
 
 .brand {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+}
+
+.logo-mark {
+	width: 42px;
+	height: 42px;
+	border-radius: 14px;
+	background: linear-gradient(135deg, var(--header-accent), var(--header-accent-dark));
+	color: #ffffff;
+	font-weight: 700;
+	display: grid;
+	place-items: center;
+	letter-spacing: 0.06em;
+	box-shadow: 0 12px 20px -18px rgba(1, 33, 105, 0.7);
+}
+
+.brand-text {
 	display: grid;
 	gap: 0.2rem;
 }
 
 .logo {
 	font-family: 'Yeseva One', 'Georgia', serif;
-	font-size: 1.4rem;
+	font-size: 1.45rem;
 	color: var(--header-ink);
 }
 
@@ -45,7 +65,8 @@
 .nav {
 	display: flex;
 	align-items: center;
-	gap: 1.2rem;
+	gap: 1rem;
+	flex-wrap: wrap;
 }
 
 .nav a {
@@ -53,15 +74,16 @@
 	text-decoration: none;
 	font-weight: 600;
 	font-size: 0.95rem;
-	padding-bottom: 0.2rem;
-	border-bottom: 2px solid transparent;
-	transition: color 0.2s ease, border-color 0.2s ease;
+	padding: 0.4rem 0.7rem;
+	border-radius: 999px;
+	transition: color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .nav a.active,
 .nav a:hover {
 	color: var(--header-ink);
-	border-bottom-color: var(--header-accent);
+	background: rgba(0, 156, 222, 0.1);
+	box-shadow: inset 0 0 0 1px rgba(0, 156, 222, 0.18);
 }
 
 .actions {
@@ -74,21 +96,92 @@
 .logout {
 	border: none;
 	border-radius: 999px;
-	padding: 0.55rem 1.2rem;
+	padding: 0.6rem 1.25rem;
 	background: linear-gradient(135deg, var(--header-accent), #003087);
 	color: #ffffff;
 	font-weight: 600;
 	cursor: pointer;
-	box-shadow: 0 10px 20px -16px rgba(28, 31, 36, 0.6);
+	box-shadow: 0 12px 22px -18px rgba(1, 33, 105, 0.7);
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.logout:hover {
+	transform: translateY(-1px);
+	box-shadow: 0 16px 26px -18px rgba(1, 33, 105, 0.8);
 }
 
 @media (max-width: 900px) {
 	.app-header {
 		flex-direction: column;
 		align-items: flex-start;
+		gap: 1rem;
+	}
+
+	.actions {
+		margin-left: 0;
+	}
+}
+
+@media (max-width: 700px) {
+	.app-header {
+		padding: 0.9rem 1.1rem;
+	}
+
+	.brand {
+		width: 100%;
+		justify-content: space-between;
+	}
+
+	.brand-text {
+		gap: 0.15rem;
+	}
+
+	.logo {
+		font-size: 1.2rem;
+	}
+
+	.tag {
+		font-size: 0.65rem;
+		letter-spacing: 0.1em;
 	}
 
 	.nav {
-		flex-wrap: wrap;
+		width: 100%;
+		gap: 0.5rem;
+	}
+
+	.nav a {
+		font-size: 0.85rem;
+		padding: 0.35rem 0.6rem;
+	}
+
+	.actions {
+		width: 100%;
+		justify-content: flex-start;
+	}
+
+	.logout {
+		width: 100%;
+		text-align: center;
+	}
+}
+
+@media (max-width: 480px) {
+	.app-header {
+		gap: 0.75rem;
+	}
+
+	.logo-mark {
+		width: 38px;
+		height: 38px;
+	}
+
+	.nav {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
+	.nav a {
+		width: 100%;
 	}
 }

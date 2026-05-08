@@ -1,6 +1,6 @@
 <section class="admin-users">
 	<header class="header">
-		<div>
+		<div class="header-text">
 			<p class="kicker">Panel administrativo</p>
 			<h1>Usuarios registrados</h1>
 			<p class="subtitle">Listado de estudiantes y creadores con su estado actual.</p>
@@ -45,15 +45,15 @@
 
 			@for (user of users(); track trackByEmail($index, user)) {
 				<div class="table-row">
-					<div>
+					<div class="cell" data-label="Correo">
 						<p class="mono">{{ user.email }}</p>
 					</div>
-					<div>
+					<div class="cell" data-label="Estado">
 						<span class="badge" [class.active]="user.isActive" [class.inactive]="!user.isActive">
 							{{ user.isActive ? 'Activo' : 'Inactivo' }}
 						</span>
 					</div>
-					<div>
+					<div class="cell" data-label="Verificacion">
 						<span class="badge" [class.verified]="user.isVerified" [class.pending]="!user.isVerified">
 							{{ user.isVerified ? 'Verificado' : 'Sin verificar' }}
 						</span>

@@ -38,6 +38,12 @@ export interface RequestActionResponse {
   status: RequestStatus;
 }
 
+export interface AdminUserSummary {
+  email: string;
+  isActive: boolean;
+  isVerified: boolean;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -64,5 +70,9 @@ export class AdminService {
       `${environment.apiBaseUrl}/api/admin/requests/creators/${requestId}/reject`,
       { reason }
     );
+  }
+
+  getAllUsers(): Observable<AdminUserSummary[]> {
+    return this.http.get<AdminUserSummary[]>(`${environment.apiBaseUrl}/api/admin/requests/users`);
   }
 }

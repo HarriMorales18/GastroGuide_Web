@@ -1,0 +1,142 @@
+.course-manager {
+	padding: 32px 28px 48px;
+	background: radial-gradient(circle at top, #fff7eb, #f9f2e8 45%, #f5e9dc 100%);
+	min-height: calc(100vh - 64px);
+	color: #1f1b16;
+	font-family: 'Playfair Display', 'Georgia', serif;
+}
+
+.course-manager__header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 32px;
+}
+
+.course-manager h1 {
+	margin: 6px 0 8px;
+	font-size: clamp(2rem, 3vw, 2.8rem);
+	letter-spacing: 0.5px;
+}
+
+.eyebrow {
+	text-transform: uppercase;
+	font-size: 0.75rem;
+	letter-spacing: 2px;
+	color: #b56b2a;
+	margin: 0;
+	font-family: 'Fira Sans', 'Segoe UI', sans-serif;
+}
+
+.subtitle {
+	margin: 0;
+	font-size: 1rem;
+	max-width: 520px;
+	color: #5a4635;
+	font-family: 'Fira Sans', 'Segoe UI', sans-serif;
+}
+
+.course-form {
+	background: #ffffff;
+	padding: 28px;
+	border-radius: 18px;
+	box-shadow: 0 20px 40px rgba(79, 53, 34, 0.12);
+	border: 1px solid rgba(181, 107, 42, 0.2);
+	font-family: 'Fira Sans', 'Segoe UI', sans-serif;
+}
+
+.course-form__grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+	gap: 20px;
+}
+
+.field {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	font-size: 0.9rem;
+}
+
+.field span {
+	font-weight: 600;
+	color: #3a2a1c;
+}
+
+.field input,
+.field textarea,
+.field select {
+	border-radius: 12px;
+	border: 1px solid rgba(79, 53, 34, 0.2);
+	padding: 12px 14px;
+	font-size: 0.95rem;
+	background: #fffdf9;
+	color: #2d2118;
+}
+
+.field input:focus,
+.field textarea:focus,
+.field select:focus {
+	outline: 2px solid rgba(181, 107, 42, 0.35);
+	border-color: rgba(181, 107, 42, 0.6);
+}
+
+.field small {
+	color: #b24535;
+	font-size: 0.8rem;
+}
+
+.field--full {
+	grid-column: 1 / -1;
+}
+
+.course-form__actions {
+	display: flex;
+	justify-content: flex-end;
+	margin-top: 20px;
+}
+
+.course-form__actions button {
+	background: #b56b2a;
+	color: #fff;
+	border: none;
+	padding: 12px 28px;
+	border-radius: 999px;
+	font-size: 1rem;
+	cursor: pointer;
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.course-form__actions button:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+}
+
+.course-form__actions button:hover:not(:disabled) {
+	transform: translateY(-1px);
+	box-shadow: 0 12px 24px rgba(181, 107, 42, 0.25);
+}
+
+.form-feedback {
+	margin-top: 16px;
+}
+
+.form-feedback__success {
+	color: #2f7a3a;
+	font-weight: 600;
+}
+
+.form-feedback__error {
+	color: #b24535;
+	font-weight: 600;
+}
+
+@media (max-width: 720px) {
+	.course-manager {
+		padding: 24px 16px 36px;
+	}
+
+	.course-form {
+		padding: 20px;
+	}
+}

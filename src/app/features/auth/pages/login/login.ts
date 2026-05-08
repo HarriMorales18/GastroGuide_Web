@@ -26,6 +26,7 @@ export class LoginComponent implements AfterViewInit, OnInit {
     password: ['', [Validators.required, Validators.minLength(6)]]
   });
 
+
   ngOnInit(): void {
     const hasToken = this.authService.getAccessToken();
     if (!hasToken) {
@@ -85,4 +86,5 @@ export class LoginComponent implements AfterViewInit, OnInit {
         }
       });
   }
+
 }

@@ -28,7 +28,8 @@ export class App {
   }
 
   private updateHeaderVisibility(url: string): void {
-    const isProtected = url.startsWith('/creator') || url.startsWith('/admin');
+    const isAdminRegister = url.startsWith('/admin/register-admin');
+    const isProtected = (url.startsWith('/creator') || url.startsWith('/admin')) && !isAdminRegister;
     this.showHeader.set(isProtected);
   }
 }

@@ -33,6 +33,15 @@ export interface LoginPayload {
   password: string;
 }
 
+export interface PasswordRecoveryPayload {
+  email: string;
+}
+
+export interface ResetPasswordPayload {
+  token: string;
+  newPassword: string;
+}
+
 export interface AuthSessionEntity {
   id: number;
   jwtToken: string;
@@ -137,6 +146,18 @@ export class AuthService {
           this.setSessionFromJwt(session.jwtToken);
         })
       );
+  }
+
+  passwordRecovery(payload: PasswordRecoveryPayload): Observable<string> {
+    return this.http.post(`${environment.apiBaseUrl}/api/auth/password-recovery`, payload, {
+      responseType: 'text'
+    });
+  }
+
+  resetPassword(payload: ResetPasswordPayload): Observable<string> {
+    return this.http.post(`${environment.apiBaseUrl}/api/auth/reset-password`, payload, {
+      responseType: 'text'
+    });
   }
 
   getAccessToken(): string | null {

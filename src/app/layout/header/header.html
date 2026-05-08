@@ -6,11 +6,13 @@
 
 	<nav class="nav" aria-label="Primary" *ngIf="section() !== 'none'">
 		@if (role() === 'CREATOR' || section() === 'creator') {
-			<a routerLink="/creator/courses" routerLinkActive="active">Cursos</a>
+			<a routerLink="/creator/all-courses" routerLinkActive="active">Cursos</a>
+			<a routerLink="/creator/courses" routerLinkActive="active">Crear Cursos</a>
 			<a routerLink="/creator/revenue" routerLinkActive="active">Ingresos</a>
 			<a routerLink="/creator/analytics" routerLinkActive="active">Analiticas</a>
 		} @else if (role() === 'ADMIN' || section() === 'admin') {
 			<a routerLink="/admin/users" routerLinkActive="active">Usuarios</a>
+			<a routerLink="/admin/list-all-users" routerLinkActive="active">Listar usuarios</a>
 			<a routerLink="/admin/review" routerLinkActive="active">Revision</a>
 			<a routerLink="/admin/status" routerLinkActive="active">Estado</a>
 		}

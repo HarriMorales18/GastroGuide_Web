@@ -1,1 +1,66 @@
-<p>course-manager works!</p>
+<section class="course-manager">
+	<header class="course-manager__header">
+		<div>
+			<h1>Crear curso</h1>
+			<p class="subtitle">Completa la informacion basica para iniciar tu curso en borrador.</p>
+		</div>
+	</header>
+
+	<form class="course-form" [formGroup]="courseForm" (ngSubmit)="onSubmit()">
+		<div class="course-form__grid">
+			<label class="field">
+				<span>Titulo del curso</span>
+				<input type="text" formControlName="title" placeholder="Ej. Tecnicas basicas de cocina" />
+				<small *ngIf="courseForm.get('title')?.touched && courseForm.get('title')?.invalid">
+					Minimo 3 caracteres.
+				</small>
+			</label>
+
+			<label class="field">
+				<span>Nivel de dificultad</span>
+				<select formControlName="difficultyLevel">
+					<option *ngFor="let level of difficultyOptions" [value]="level">{{ level }}</option>
+				</select>
+			</label>
+
+			<label class="field field--full">
+				<span>Descripcion</span>
+				<textarea
+					rows="4"
+					formControlName="description"
+					placeholder="Describe los objetivos y el enfoque del curso"
+				></textarea>
+				<small *ngIf="courseForm.get('description')?.touched && courseForm.get('description')?.invalid">
+					Minimo 10 caracteres.
+				</small>
+			</label>
+
+			<label class="field">
+				<span>Categoria</span>
+				<select formControlName="category">
+					<option *ngFor="let category of categoryOptions" [value]="category">{{ category }}</option>
+				</select>
+			</label>
+
+			<label class="field">
+				<span>Tipo de cocina</span>
+				<select formControlName="cuisineType">
+					<option *ngFor="let cuisine of cuisineOptions" [value]="cuisine">{{ cuisine }}</option>
+				</select>
+			</label>
+		</div>
+
+		<div class="form-feedback" *ngIf="successMessage()">
+			<span class="form-feedback__success">{{ successMessage() }}</span>
+		</div>
+		<div class="form-feedback" *ngIf="errorMessage()">
+			<span class="form-feedback__error">{{ errorMessage() }}</span>
+		</div>
+
+		<div class="course-form__actions">
+			<button type="submit" [disabled]="isSubmitting()">
+				{{ isSubmitting() ? 'Guardando...' : 'Guardar curso' }}
+			</button>
+		</div>
+	</form>
+</section>

@@ -1,0 +1,330 @@
+<section class="creator-courses">
+	<header class="header">
+		<div>
+			<p class="kicker">Panel de creador</p>
+			<h1>Cursos creados</h1>
+			<p class="subtitle">Gestiona los cursos creados y revisa su informacion principal.</p>
+		</div>
+		<div class="summary">
+			<div class="summary-card">
+				<span>Total</span>
+				<strong>{{ totalCount() }}</strong>
+			</div>
+			<div class="summary-card highlight">
+				<span>Principiante</span>
+				<strong>{{ beginnerCount() }}</strong>
+			</div>
+			<div class="summary-card">
+				<span>Intermedio</span>
+				<strong>{{ intermediateCount() }}</strong>
+			</div>
+			<div class="summary-card">
+				<span>Avanzado</span>
+				<strong>{{ advancedCount() }}</strong>
+			</div>
+		</div>
+		<div class="action-bar">
+			<button class="primary" type="button" (click)="openModal('module')">Agregar modulos</button>
+			<button class="ghost" type="button" (click)="openModal('lesson')">Agregar lecciones</button>
+		</div>
+	</header>
+
+	@if (isLoading()) {
+		<div class="state">
+			<div class="spinner"></div>
+			<p>Cargando cursos...</p>
+		</div>
+	} @else if (error()) {
+		<div class="state error">
+			<p>{{ error() }}</p>
+			<button class="ghost" type="button" (click)="reload()">Reintentar</button>
+		</div>
+	} @else if (!courses().length) {
+		<div class="state empty">
+			<p>No hay cursos registrados.</p>
+		</div>
+	} @else {
+		<div class="table">
+			<div class="table-row table-head">
+				<span>Curso</span>
+				<span>Nivel</span>
+				<span>Categoria</span>
+				<span>Tipo de cocina</span>
+			</div>
+
+			@for (course of courses(); track trackByCourse($index, course)) {
+				<button class="table-row" type="button" (click)="selectCourse(course)">
+					<div>
+						<p class="title">{{ course.title }}</p>
+						<p class="description">{{ course.description }}</p>
+					</div>
+					<div>
+						<span
+							class="badge"
+							[class.beginner]="course.difficultyLevel === 'BEGINNER'"
+							[class.intermediate]="course.difficultyLevel === 'INTERMEDIATE'"
+							[class.advanced]="course.difficultyLevel === 'ADVANCED'"
+						>
+							{{ course.difficultyLevel }}
+						</span>
+					</div>
+					<div>
+						<span class="tag">{{ course.category }}</span>
+					</div>
+					<div>
+						<span class="tag">{{ course.cuisineType }}</span>
+					</div>
+				</button>
+			}
+		</div>
+
+		@if (selectedCourse()) {
+			<form class="edit-panel" [formGroup]="courseForm" (ngSubmit)="updateCourse()">
+				<header>
+					<div>
+						<h2>Editar curso</h2>
+						<p class="subtitle">Actualiza la informacion principal del curso.</p>
+					</div>
+					<button type="button" class="ghost" (click)="clearSelection()">Cerrar</button>
+				</header>
+
+				<div class="edit-grid">
+					<label class="field">
+						<span>Titulo del curso</span>
+						<input type="text" formControlName="title" placeholder="Ej. Tecnicas basicas de cocina" />
+						@if (courseForm.get('title')?.touched && courseForm.get('title')?.invalid) {
+							<small>Minimo 3 caracteres.</small>
+						}
+					</label>
+
+					<label class="field">
+						<span>Nivel de dificultad</span>
+						<select formControlName="difficultyLevel">
+							@for (level of difficultyOptions; track $index) {
+								<option [value]="level">{{ level }}</option>
+							}
+						</select>
+					</label>
+
+					<label class="field field--full">
+						<span>Descripcion</span>
+						<textarea
+							rows="4"
+							formControlName="description"
+							placeholder="Describe los objetivos y el enfoque del curso"
+						></textarea>
+						@if (courseForm.get('description')?.touched && courseForm.get('description')?.invalid) {
+							<small>Minimo 10 caracteres.</small>
+						}
+					</label>
+
+					<label class="field">
+						<span>Categoria</span>
+						<select formControlName="category">
+							@for (category of categoryOptions; track $index) {
+								<option [value]="category">{{ category }}</option>
+							}
+						</select>
+					</label>
+
+					<label class="field">
+						<span>Tipo de cocina</span>
+						<select formControlName="cuisineType">
+							@for (cuisine of cuisineOptions; track $index) {
+								<option [value]="cuisine">{{ cuisine }}</option>
+							}
+						</select>
+					</label>
+
+					<label class="field">
+						<span>Imagen de portada</span>
+						<input type="url" formControlName="coverImageUrl" placeholder="https://" />
+					</label>
+
+					<label class="field">
+						<span>Tags</span>
+						<input type="text" formControlName="tags" placeholder="Ej. cocina, basico" />
+					</label>
+
+					<label class="field">
+						<span>Idioma</span>
+						<input type="text" formControlName="language" placeholder="Ej. Espanol" />
+					</label>
+				</div>
+
+				@if (saveSuccess()) {
+					<div class="form-feedback success">{{ saveSuccess() }}</div>
+				}
+				@if (saveError()) {
+					<div class="form-feedback error">{{ saveError() }}</div>
+				}
+
+				<div class="edit-actions">
+					<button type="submit" [disabled]="isSaving()">
+						{{ isSaving() ? 'Guardando...' : 'Actualizar curso' }}
+					</button>
+					<button type="button" class="ghost" (click)="clearSelection()">Cancelar</button>
+				</div>
+			</form>
+		}
+	}
+
+	@if (activeModal() === 'module') {
+		<div class="modal" role="dialog" aria-modal="true" aria-labelledby="module-modal-title">
+			<div class="modal__backdrop" (click)="closeModal()"></div>
+			<div class="modal__panel" id="course-action-form">
+				<header>
+					<div>
+						<h2 id="module-modal-title">Agregar modulo</h2>
+						<p class="subtitle">Selecciona el curso y completa la informacion del modulo.</p>
+					</div>
+					<button type="button" class="ghost" (click)="closeModal()">Cerrar</button>
+				</header>
+
+				<form class="modal__form" [formGroup]="moduleForm" (ngSubmit)="submitModule()">
+					<label class="field">
+						<span>Curso</span>
+						<select formControlName="courseId">
+							<option value="">Selecciona un curso</option>
+							@for (course of courses(); track trackByCourse($index, course)) {
+								<option [value]="course.id">{{ course.title }}</option>
+							}
+						</select>
+					</label>
+
+					<label class="field">
+						<span>Titulo del modulo</span>
+						<input type="text" formControlName="title" placeholder="Ej. Introduccion" />
+						@if (moduleForm.get('title')?.touched && moduleForm.get('title')?.invalid) {
+							<small>Minimo 3 caracteres.</small>
+						}
+					</label>
+
+					<label class="field field--full">
+						<span>Descripcion</span>
+						<textarea rows="4" formControlName="description"></textarea>
+						@if (moduleForm.get('description')?.touched && moduleForm.get('description')?.invalid) {
+							<small>Minimo 5 caracteres.</small>
+						}
+					</label>
+
+					@if (modalSuccess()) {
+						<div class="form-feedback success">{{ modalSuccess() }}</div>
+					}
+					@if (modalError()) {
+						<div class="form-feedback error">{{ modalError() }}</div>
+					}
+
+					<div class="edit-actions">
+						<button type="submit" [disabled]="isSubmittingModule()">
+							{{ isSubmittingModule() ? 'Guardando...' : 'Crear modulo' }}
+						</button>
+						<button type="button" class="ghost" (click)="closeModal()">Cancelar</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	}
+
+	@if (activeModal() === 'lesson') {
+		<div class="modal" role="dialog" aria-modal="true" aria-labelledby="lesson-modal-title">
+			<div class="modal__backdrop" (click)="closeModal()"></div>
+			<div class="modal__panel" id="course-action-form">
+				<header>
+					<div>
+						<h2 id="lesson-modal-title">Agregar leccion</h2>
+						<p class="subtitle">Selecciona el curso, el modulo y completa la leccion.</p>
+					</div>
+					<button type="button" class="ghost" (click)="closeModal()">Cerrar</button>
+				</header>
+
+				<form class="modal__form" [formGroup]="lessonForm" (ngSubmit)="submitLesson()">
+					<label class="field">
+						<span>Curso</span>
+						<select formControlName="courseId">
+							<option value="">Selecciona un curso</option>
+							@for (course of courses(); track trackByCourse($index, course)) {
+								<option [value]="course.id">{{ course.title }}</option>
+							}
+						</select>
+					</label>
+
+					<label class="field">
+						<span>Modulo</span>
+						<select formControlName="moduleId" [disabled]="isLoadingModules() || !modules().length">
+							<option value="">
+								@if (isLoadingModules()) { Cargando modulos... } @else { Selecciona un modulo }
+							</option>
+							@for (module of modules(); track $index) {
+								<option [value]="module.id">{{ module.title }}</option>
+							}
+						</select>
+						@if (modulesError()) {
+							<small class="hint">{{ modulesError() }}</small>
+						}
+					</label>
+
+					<label class="field">
+						<span>Titulo de leccion</span>
+						<input type="text" formControlName="title" placeholder="Ej. Mise en place" />
+					</label>
+
+					<label class="field field--full">
+						<span>Descripcion</span>
+						<textarea rows="3" formControlName="description"></textarea>
+					</label>
+
+					<label class="field">
+						<span>Tipo de leccion</span>
+						<select formControlName="lessonType">
+							@for (type of lessonTypeOptions; track $index) {
+								<option [value]="type">{{ type }}</option>
+							}
+						</select>
+					</label>
+
+					<div class="field field--full checkbox">
+						<span>Vista previa gratis</span>
+						<label class="checkbox__control">
+							<input type="checkbox" formControlName="isFreePreview" />
+							<span>Permitir vista previa gratuita</span>
+						</label>
+					</div>
+
+					<label class="field">
+						<span>URL de video</span>
+						<input type="url" formControlName="videoUrl" placeholder="https://" />
+					</label>
+
+					<label class="field">
+						<span>Tipo de recurso</span>
+						<select formControlName="resourceType">
+							@for (type of resourceTypeOptions; track $index) {
+								<option [value]="type">{{ type }}</option>
+							}
+						</select>
+					</label>
+
+					<label class="field field--full">
+						<span>Archivo (URL)</span>
+						<input type="url" formControlName="fileUrl" placeholder="https://" />
+					</label>
+
+					@if (modalSuccess()) {
+						<div class="form-feedback success">{{ modalSuccess() }}</div>
+					}
+					@if (modalError()) {
+						<div class="form-feedback error">{{ modalError() }}</div>
+					}
+
+					<div class="edit-actions">
+						<button type="submit" [disabled]="isSubmittingLesson()">
+							{{ isSubmittingLesson() ? 'Guardando...' : 'Crear leccion' }}
+						</button>
+						<button type="button" class="ghost" (click)="closeModal()">Cancelar</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	}
+</section>

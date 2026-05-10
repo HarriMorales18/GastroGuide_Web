@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
-import { AdminService, AdminUserSummary } from '../services/admin.service';
+import { AdminService, AdminUserSummary } from '../../services/admin.service';
 
 @Component({
   selector: 'app-list-all-users',

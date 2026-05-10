@@ -31,6 +31,10 @@
       </div>
 
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="auth-form">
+        <p class="form-error anime-item" *ngIf="loginErrorMessage()">
+          {{ loginErrorMessage() }}
+        </p>
+
         <div class="form-group anime-item">
           <label for="email">Correo Electrónico</label>
           <input

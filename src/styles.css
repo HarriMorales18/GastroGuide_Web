@@ -1,3 +1,5 @@
+@import 'ngx-toastr/toastr';
+
 :root {
   /* Paleta oficial de GastroGuide */
   --color-primary: #009CDE;    /* Azul brillante - Ideal para botones y llamadas a la acción */

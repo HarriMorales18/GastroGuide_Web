@@ -1,12 +1,11 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpBackend, HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import {
   CourseCreatePayload,
   CourseCreateResponse,
   CourseSummary,
-  CourseUpdatePayload,
   LessonCreatePayload,
   ModuleCreatePayload,
   ModuleUpdatePayload,
@@ -18,6 +17,7 @@ import {
 })
 export class CreatorService {
   private http = inject(HttpClient);
+  private rawHttp = new HttpClient(inject(HttpBackend));
 
   createCourse(payload: CourseCreatePayload): Observable<CourseCreateResponse> {
     return this.http.post<CourseCreateResponse>(
@@ -27,10 +27,10 @@ export class CreatorService {
   }
 
   getCourseSummaries(): Observable<CourseSummary[]> {
-    return this.http.get<CourseSummary[]>(`${environment.apiBaseUrl}/api/courses/summary`);
+    return this.http.get<CourseSummary[]>(`${environment.apiBaseUrl}/api/courses/creator`);
   }
 
-  updateCourse(courseId: number | string, payload: CourseUpdatePayload): Observable<string> {
+  updateCourse(courseId: number | string, payload: FormData): Observable<string> {
     return this.http.patch(`${environment.apiBaseUrl}/api/courses/${courseId}`, payload, {
       responseType: 'text'
     });
@@ -56,7 +56,31 @@ export class CreatorService {
 
   getModulesByCourse(courseId: number | string): Observable<ModuleSummary[]> {
     return this.http.get<ModuleSummary[]>(
-      `${environment.apiBaseUrl}/api/courses/${courseId}/modules`
+      `${environment.apiBaseUrl}/api/modules/course/${courseId}`
     );
+  }
+
+  getVideoPresignedUrl(fileName: string, contentType: string): Observable<unknown> {
+    const params = new HttpParams({
+      fromObject: {
+        fileName,
+        contentType
+      }
+    });
+
+    return this.http.get(`${environment.apiBaseUrl}/api/media/upload/video/presigned-url`, {
+      params
+    });
+  }
+
+  uploadVideoToPresignedUrl(uploadUrl: string, file: File): Observable<string> {
+    const headers = new HttpHeaders({
+      'Content-Type': file.type || 'application/octet-stream'
+    });
+
+    return this.rawHttp.put(uploadUrl, file, {
+      headers,
+      responseType: 'text'
+    });
   }
 }

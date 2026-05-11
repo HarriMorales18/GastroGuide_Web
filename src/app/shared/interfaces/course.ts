@@ -53,7 +53,6 @@ export interface CourseUpdatePayload {
 	difficultyLevel: DifficultyLevel;
 	category: CourseCategory;
 	cuisineType: CuisineType;
-	coverImageUrl: string;
 	tags: string;
 	language: string;
 }

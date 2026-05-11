@@ -1,10 +1,10 @@
 import { Component, AfterViewInit, ElementRef, OnInit, inject, signal } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { animate, stagger } from 'animejs';
 import { finalize } from 'rxjs';
-import { AuthService, ResetPasswordPayload } from '../../services/auth.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-reset-password',
@@ -21,24 +21,36 @@ export class ResetPasswordComponent implements AfterViewInit, OnInit {
   private authService = inject(AuthService);
 
   isSubmitting = signal(false);
-  hasToken = signal(false);
+  token = '';
 
+  // Formulario con nueva estructura
   resetForm = this.fb.nonNullable.group({
-    token: ['', Validators.required],
-    newPassword: ['', [Validators.required, Validators.minLength(8)]]
-  });
+    newPassword: ['', [Validators.required, Validators.minLength(8)]],
+    confirmPassword: ['', [Validators.required]]
+  }, { validators: this.passwordMatchValidator });
 
   ngOnInit(): void {
-    const token = this.route.snapshot.queryParamMap.get('token');
-    if (token) {
-      this.resetForm.controls.token.setValue(token);
-      this.hasToken.set(true);
+    // Atrapamos el token de la URL (ej: /reset-password?token=abc123...)
+    const tokenFromUrl = this.route.snapshot.queryParamMap.get('token');
+    if (tokenFromUrl) {
+      this.token = tokenFromUrl;
+    } else {
+      // Opcional: Redirigir si no hay token, ya que la vista no sirve sin él
+      console.warn('No se encontró un token de recuperación.');
     }
+  }
+
+  // Validador personalizado para confirmar contraseña
+  passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
+    const password = control.get('newPassword');
+    const confirmPassword = control.get('confirmPassword');
+    return password && confirmPassword && password.value !== confirmPassword.value 
+      ? { passwordMismatch: true } 
+      : null;
   }
 
   ngAfterViewInit() {
     const targets = this.el.nativeElement.querySelectorAll('.anime-item');
-
     animate(targets, {
       translateY: [30, 0],
       opacity: [0, 1],
@@ -49,25 +61,28 @@ export class ResetPasswordComponent implements AfterViewInit, OnInit {
   }
 
   onSubmit() {
-    if (this.resetForm.invalid) {
+    if (this.resetForm.invalid || !this.token) {
       this.resetForm.markAllAsTouched();
       return;
     }
 
     this.isSubmitting.set(true);
-    const payload = this.resetForm.getRawValue() as ResetPasswordPayload;
+
+    // Mapeamos al cuerpo exacto que pide tu endpoint
+    const payload = {
+      token: this.token,
+      newPassword: this.resetForm.getRawValue().newPassword
+    };
 
     this.authService
       .resetPassword(payload)
       .pipe(finalize(() => this.isSubmitting.set(false)))
       .subscribe({
         next: () => {
-          alert('Contrasena restablecida. Ya puedes iniciar sesion.');
-          this.router.navigate(['/auth/login']);
+          this.router.navigate(['/auth/login'], { queryParams: { resetSuccess: true } });
         },
-        error: (error) => {
-          console.error('Error al restablecer contrasena:', error);
-          alert('No se pudo restablecer la contrasena. Verifica el token.');
+        error: (err) => {
+          console.error('Error al restablecer:', err);
         }
       });
   }

@@ -51,13 +51,6 @@
 			</label>
 		</div>
 
-		<div class="form-feedback" *ngIf="successMessage()">
-			<span class="form-feedback__success">{{ successMessage() }}</span>
-		</div>
-		<div class="form-feedback" *ngIf="errorMessage()">
-			<span class="form-feedback__error">{{ errorMessage() }}</span>
-		</div>
-
 		<div class="course-form__actions">
 			<button type="submit" [disabled]="isSubmitting()">
 				{{ isSubmitting() ? 'Guardando...' : 'Guardar curso' }}

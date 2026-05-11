@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
-import { AdminService, AdminUserSummary } from '../../services/admin.service';
+import { AdminService, AdminUserSummary } from '../../../services/admin.service';
 
 @Component({
   selector: 'app-list-all-users',
@@ -39,15 +39,15 @@ export class ListAllUsers implements OnInit {
         direction: 'asc'
       })
       .subscribe({
-      next: (data) => {
-        this.users.set(this.normalizeUsers(data as UsersResponse));
-        this.isLoading.set(false);
-      },
-      error: () => {
-        this.error.set('No se pudieron cargar los usuarios.');
-        this.isLoading.set(false);
-      }
-    });
+        next: (data) => {
+          this.users.set(this.normalizeUsers(data as UsersResponse));
+          this.isLoading.set(false);
+        },
+        error: () => {
+          this.error.set('No se pudieron cargar los usuarios.');
+          this.isLoading.set(false);
+        }
+      });
   }
 
   trackByEmail(_: number, user: AdminUserSummary): string {

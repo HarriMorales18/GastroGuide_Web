@@ -14,4 +14,12 @@ export class ToastService {
       closeButton: true
     });
   }
+
+  showSuccess(message: string): void {
+    this.toastr.success(message, '', {
+      timeOut: 3000,
+      progressBar: true,
+      closeButton: true
+    });
+  }
 }

@@ -1,4 +1,4 @@
-import { CommonModule, DOCUMENT } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -11,7 +11,8 @@ import {
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { finalize } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { CreatorService } from '../../services/creator.service';
+import { ToastService } from '../../../../../core/services/toast.service';
+import { CreatorService } from '../../../services/creator.service';
 import {
   CourseCategory,
   CourseSummary,
@@ -22,12 +23,12 @@ import {
   ModuleCreatePayload,
   ModuleUpdatePayload,
   ModuleSummary
-} from '../../../../shared/interfaces/course';
+} from '../../../../../shared/interfaces/course';
 import {
   COURSE_CATEGORY_OPTIONS,
   CUISINE_OPTIONS,
   DIFFICULTY_OPTIONS
-} from '../../../../core/constants/course-options';
+} from '../../../../../core/constants/course-options';
 
 @Component({
   selector: 'app-all-courses',
@@ -39,8 +40,8 @@ import {
 export class AllCourses implements OnInit {
   private fb = inject(FormBuilder);
   private creatorService = inject(CreatorService);
-  private document = inject(DOCUMENT);
   private destroyRef = inject(DestroyRef);
+  private toastService = inject(ToastService);
 
   isLoading = signal(true);
   isSaving = signal(false);
@@ -179,6 +180,7 @@ export class AllCourses implements OnInit {
       tags: course.tags ?? '',
       language: course.language ?? ''
     });
+
   }
 
   clearSelection(): void {
@@ -230,12 +232,16 @@ export class AllCourses implements OnInit {
     this.saveSuccess.set(null);
 
     if (!selected) {
-      this.saveError.set('Selecciona un curso para editar.');
+      const message = 'Selecciona un curso para editar.';
+      this.saveError.set(message);
+      this.toastService.showError(message);
       return;
     }
 
     if (selected.id == null || selected.id === '') {
-      this.saveError.set('Este curso no tiene ID. Revisa el endpoint de resumen.');
+      const message = 'Este curso no tiene ID. Revisa el endpoint de resumen.';
+      this.saveError.set(message);
+      this.toastService.showError(message);
       return;
     }
 
@@ -274,10 +280,14 @@ export class AllCourses implements OnInit {
             ...payload
           });
           this.resetCoverImageSelection();
-          this.saveSuccess.set('Curso actualizado correctamente.');
+          const message = 'Curso actualizado correctamente.';
+          this.saveSuccess.set(message);
+          this.toastService.showSuccess(message);
         },
         error: () => {
-          this.saveError.set('No se pudo actualizar el curso. Intenta de nuevo.');
+          const message = 'No se pudo actualizar el curso. Intenta de nuevo.';
+          this.saveError.set(message);
+          this.toastService.showError(message);
         }
       });
   }
@@ -318,7 +328,6 @@ export class AllCourses implements OnInit {
         this.loadModules(courseId);
       }
     }
-    this.scrollToModalForm();
   }
 
   closeModal(): void {
@@ -340,10 +349,14 @@ export class AllCourses implements OnInit {
       .pipe(finalize(() => this.isSubmittingModule.set(false)))
       .subscribe({
         next: () => {
-          this.modalSuccess.set('Modulo creado correctamente.');
+          const message = 'Modulo creado correctamente.';
+          this.modalSuccess.set(message);
+          this.toastService.showSuccess(message);
         },
         error: () => {
-          this.modalError.set('No se pudo crear el modulo. Intenta de nuevo.');
+          const message = 'No se pudo crear el modulo. Intenta de nuevo.';
+          this.modalError.set(message);
+          this.toastService.showError(message);
         }
       });
   }
@@ -352,7 +365,9 @@ export class AllCourses implements OnInit {
     this.modalError.set(null);
     this.modalSuccess.set(null);
     if (this.isUploadingVideo()) {
-      this.modalError.set('Espera a que termine la carga del video.');
+      const message = 'Espera a que termine la carga del video.';
+      this.modalError.set(message);
+      this.toastService.showError(message);
       return;
     }
     if (this.lessonForm.invalid) {
@@ -367,10 +382,14 @@ export class AllCourses implements OnInit {
       .pipe(finalize(() => this.isSubmittingLesson.set(false)))
       .subscribe({
         next: () => {
-          this.modalSuccess.set('Leccion creada correctamente.');
+          const message = 'Leccion creada correctamente.';
+          this.modalSuccess.set(message);
+          this.toastService.showSuccess(message);
         },
         error: () => {
-          this.modalError.set('No se pudo crear la leccion. Intenta de nuevo.');
+          const message = 'No se pudo crear la leccion. Intenta de nuevo.';
+          this.modalError.set(message);
+          this.toastService.showError(message);
         }
       });
   }
@@ -414,10 +433,14 @@ export class AllCourses implements OnInit {
                 : item
             )
           );
-          this.modalSuccess.set('Modulo actualizado correctamente.');
+          const message = 'Modulo actualizado correctamente.';
+          this.modalSuccess.set(message);
+          this.toastService.showSuccess(message);
         },
         error: () => {
-          this.modalError.set('No se pudo actualizar el modulo. Intenta de nuevo.');
+          const message = 'No se pudo actualizar el modulo. Intenta de nuevo.';
+          this.modalError.set(message);
+          this.toastService.showError(message);
         }
       });
   }
@@ -590,13 +613,6 @@ export class AllCourses implements OnInit {
         this.isLoadingModules.set(false);
       }
     });
-  }
-
-  private scrollToModalForm(): void {
-    setTimeout(() => {
-      const target = this.document.getElementById('course-action-form');
-      target?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 0);
   }
 
   private normalizeCourses(items: CourseSummary[]): CourseSummary[] {

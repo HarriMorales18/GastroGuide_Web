@@ -1,3 +1,3 @@
 export const environment = {
-	apiBaseUrl: 'https://gastroguide.duckdns.org'
+	apiBaseUrl: 'http://localhost:8080'
 };

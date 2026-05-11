@@ -137,9 +137,43 @@
 						</select>
 					</label>
 
-					<label class="field">
+					<label class="field field--full">
 						<span>Imagen de portada</span>
-						<input type="url" formControlName="coverImageUrl" placeholder="https://" />
+						<div
+							class="image-dropzone"
+							[class.is-dragging]="isCoverImageDragging"
+							role="button"
+							tabindex="0"
+							(dragover)="onCoverImageDragOver($event)"
+							(dragleave)="onCoverImageDragLeave($event)"
+							(drop)="onCoverImageDrop($event)"
+							(click)="triggerCoverImageSelect(coverImageInput)"
+							(keydown.enter)="triggerCoverImageSelect(coverImageInput)"
+							(keydown.space)="$event.preventDefault(); triggerCoverImageSelect(coverImageInput)"
+						>
+							<input
+								#coverImageInput
+								type="file"
+								accept="image/*"
+								class="image-dropzone__input"
+								(change)="onCoverImageSelected($event)"
+							/>
+							@if (coverImagePreviewUrl) {
+								<img
+									class="image-dropzone__preview"
+									[src]="coverImagePreviewUrl"
+									alt="Vista previa de la portada"
+								/>
+							} @else {
+								<div class="image-dropzone__placeholder">
+									<p>Arrastra una imagen o haz clic para cargarla.</p>
+									<span>PNG, JPG o WEBP hasta 10 MB.</span>
+								</div>
+							}
+						</div>
+						@if (coverImageFile) {
+							<small class="hint">Archivo: {{ coverImageFile.name }}</small>
+						}
 					</label>
 
 					<label class="field">
@@ -293,8 +327,30 @@
 					</div>
 
 					<label class="field field--left">
-						<span>URL de video</span>
-						<input type="url" formControlName="videoUrl" placeholder="https://" />
+						<span>Video (archivo)</span>
+						<input type="file" accept="video/*" (change)="onLessonVideoSelected($event)" />
+						@if (videoFile) {
+							<small class="hint">Archivo: {{ videoFile.name }}</small>
+						}
+						@if (isUploadingVideo()) {
+							<small class="hint">Subiendo video...</small>
+						}
+						@if (videoUploadSuccess()) {
+							<small class="hint">{{ videoUploadSuccess() }}</small>
+						}
+						@if (videoUploadError()) {
+							<small>{{ videoUploadError() }}</small>
+						}
+					</label>
+
+					<label class="field field--right">
+						<span>URL de video (generada)</span>
+						<input
+							type="url"
+							formControlName="videoUrl"
+							placeholder="Se completa al subir"
+							readonly
+						/>
 					</label>
 
 					<label class="field field--right">

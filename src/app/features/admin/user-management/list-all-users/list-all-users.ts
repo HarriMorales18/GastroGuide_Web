@@ -31,9 +31,16 @@ export class ListAllUsers implements OnInit {
     this.isLoading.set(true);
     this.error.set(null);
 
-    this.adminService.getAllUsers().subscribe({
+    this.adminService
+      .getAllUsers({
+        pageNumber: 0,
+        pageSize: 1000,
+        sortBy: 'email',
+        direction: 'asc'
+      })
+      .subscribe({
       next: (data) => {
-        this.users.set(data ?? []);
+        this.users.set(this.normalizeUsers(data as UsersResponse));
         this.isLoading.set(false);
       },
       error: () => {
@@ -46,4 +53,26 @@ export class ListAllUsers implements OnInit {
   trackByEmail(_: number, user: AdminUserSummary): string {
     return user.email;
   }
+
+  private normalizeUsers(response: UsersResponse): AdminUserSummary[] {
+    if (Array.isArray(response)) {
+      return response;
+    }
+    if (response && Array.isArray(response.users)) {
+      return response.users;
+    }
+    if (response && Array.isArray(response.data)) {
+      return response.data;
+    }
+    if (response && Array.isArray(response.content)) {
+      return response.content;
+    }
+    return [];
+  }
 }
+
+type UsersResponse =
+  | AdminUserSummary[]
+  | { users?: AdminUserSummary[]; data?: AdminUserSummary[]; content?: AdminUserSummary[] }
+  | null
+  | undefined;

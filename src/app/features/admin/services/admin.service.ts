@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 
@@ -72,7 +72,21 @@ export class AdminService {
     );
   }
 
-  getAllUsers(): Observable<AdminUserSummary[]> {
-    return this.http.get<AdminUserSummary[]>(`${environment.apiBaseUrl}/api/admin/requests/users`);
+  getAllUsers(options?: {
+    pageNumber?: number;
+    pageSize?: number;
+    sortBy?: string;
+    direction?: 'asc' | 'desc';
+  }): Observable<unknown> {
+    const params = new HttpParams({
+      fromObject: {
+        pageNumber: options?.pageNumber ?? 0,
+        pageSize: options?.pageSize ?? 1000,
+        sortBy: options?.sortBy ?? 'email',
+        direction: options?.direction ?? 'asc'
+      }
+    });
+
+    return this.http.get(`${environment.apiBaseUrl}/api/users`, { params });
   }
 }

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="GastroGuide logo">
+  <defs>
+    <linearGradient id="gg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#012169"/>
+      <stop offset="1" stop-color="#009CDE"/>
+    </linearGradient>
+  </defs>
+  <rect x="44" y="44" width="424" height="424" rx="120" fill="url(#gg)"/>
+  <path d="M160 156c22 0 40 18 40 40v148h-34V196c0-3-3-6-6-6h-44c-3 0-6 3-6 6v148H76V196c0-22 18-40 40-40h44z" fill="#ffffff"/>
+  <path d="M256 128c10 0 18 8 18 18v198c0 14 11 26 26 26s26-12 26-26V180c0-10 8-18 18-18s18 8 18 18v164c0 34-28 62-62 62s-62-28-62-62V146c0-10 8-18 18-18z" fill="#ffffff"/>
+  <path d="M352 156h44c22 0 40 18 40 40v148h-34V196c0-3-3-6-6-6h-44c-3 0-6 3-6 6v148h-34V196c0-22 18-40 40-40z" fill="#ffffff"/>
+</svg>

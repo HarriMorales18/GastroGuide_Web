@@ -11,7 +11,7 @@ import {
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { finalize } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { CreatorService } from '../services/creator.service';
+import { CreatorService } from '../../services/creator.service';
 import {
   CourseCategory,
   CourseSummary,
@@ -22,18 +22,18 @@ import {
   ModuleCreatePayload,
   ModuleUpdatePayload,
   ModuleSummary
-} from '../../../shared/interfaces/course';
+} from '../../../../shared/interfaces/course';
 import {
   COURSE_CATEGORY_OPTIONS,
   CUISINE_OPTIONS,
   DIFFICULTY_OPTIONS
-} from '../../../core/constants/course-options';
+} from '../../../../core/constants/course-options';
 
 @Component({
   selector: 'app-all-courses',
   imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './all-courses/all-courses.html',
-  styleUrl: './all-courses/all-courses.css',
+  templateUrl: './all-courses.html',
+  styleUrl: './all-courses.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AllCourses implements OnInit {

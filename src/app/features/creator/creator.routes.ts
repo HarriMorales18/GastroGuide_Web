@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router';
-import { CourseManager } from './content-creation/course-manager/course-manager';
-import { RevenueDashboard } from './monetization/revenue-dashboard/revenue-dashboard';
-import { MetricsDashboard } from './analytics/metrics-dashboard/metrics-dashboard';
-import { AllCourses } from './all-courses/all-courses';
+import { CourseManager } from './content-creation/pages/course-manager/course-manager';
+import { RevenueDashboard } from './monetization/pages/revenue-dashboard/revenue-dashboard';
+import { MetricsDashboard } from './analytics/pages/metrics-dashboard/metrics-dashboard';
+import { AllCourses } from './courses/pages/all-courses/all-courses';
 
 export const CREATOR_ROUTES: Routes = [
   {

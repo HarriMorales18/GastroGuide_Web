@@ -80,14 +80,17 @@
 		</div>
 
 		@if (selectedCourse()) {
-			<form class="edit-panel" [formGroup]="courseForm" (ngSubmit)="updateCourse()">
-				<header>
-					<div>
-						<h2>Editar curso</h2>
-						<p class="subtitle">Actualiza la informacion principal del curso.</p>
-					</div>
-					<button type="button" class="ghost" (click)="clearSelection()">Cerrar</button>
-				</header>
+			<div class="modal" role="dialog" aria-modal="true" aria-labelledby="edit-course-title">
+				<div class="modal__backdrop" (click)="clearSelection()"></div>
+				<div class="modal__panel modal__panel--edit">
+					<form class="edit-panel edit-panel--modal" [formGroup]="courseForm" (ngSubmit)="updateCourse()">
+						<header>
+							<div>
+								<h2 id="edit-course-title">Editar curso</h2>
+								<p class="subtitle">Actualiza la informacion principal del curso.</p>
+							</div>
+							<button type="button" class="ghost" (click)="clearSelection()">Cerrar</button>
+						</header>
 
 				<div class="edit-grid">
 					<label class="field">
@@ -119,25 +122,40 @@
 						}
 					</label>
 
-					<label class="field">
-						<span>Categoria</span>
-						<select formControlName="category">
-							@for (category of categoryOptions; track $index) {
-								<option [value]="category">{{ category }}</option>
-							}
-						</select>
-					</label>
+				</div>
 
-					<label class="field">
-						<span>Tipo de cocina</span>
-						<select formControlName="cuisineType">
-							@for (cuisine of cuisineOptions; track $index) {
-								<option [value]="cuisine">{{ cuisine }}</option>
-							}
-						</select>
-					</label>
+				<div class="edit-bottom">
+					<div class="edit-bottom__fields">
+						<label class="field">
+							<span>Categoria</span>
+							<select formControlName="category">
+								@for (category of categoryOptions; track $index) {
+									<option [value]="category">{{ category }}</option>
+								}
+							</select>
+						</label>
 
-					<label class="field field--full">
+						<label class="field">
+							<span>Tipo de cocina</span>
+							<select formControlName="cuisineType">
+								@for (cuisine of cuisineOptions; track $index) {
+									<option [value]="cuisine">{{ cuisine }}</option>
+								}
+							</select>
+						</label>
+
+						<label class="field">
+							<span>Tags</span>
+							<input type="text" formControlName="tags" placeholder="Ej. cocina, basico" />
+						</label>
+
+						<label class="field">
+							<span>Idioma</span>
+							<input type="text" formControlName="language" placeholder="Ej. Espanol" />
+						</label>
+					</div>
+
+					<div class="field field--image">
 						<span>Imagen de portada</span>
 						<div
 							class="image-dropzone"
@@ -147,9 +165,6 @@
 							(dragover)="onCoverImageDragOver($event)"
 							(dragleave)="onCoverImageDragLeave($event)"
 							(drop)="onCoverImageDrop($event)"
-							(click)="triggerCoverImageSelect(coverImageInput)"
-							(keydown.enter)="triggerCoverImageSelect(coverImageInput)"
-							(keydown.space)="$event.preventDefault(); triggerCoverImageSelect(coverImageInput)"
 						>
 							<input
 								#coverImageInput
@@ -163,9 +178,19 @@
 									class="image-dropzone__preview"
 									[src]="coverImagePreviewUrl"
 									alt="Vista previa de la portada"
+									(click)="triggerCoverImageSelect(coverImageInput)"
+									(keydown.enter)="triggerCoverImageSelect(coverImageInput)"
+									(keydown.space)="$event.preventDefault(); triggerCoverImageSelect(coverImageInput)"
 								/>
 							} @else {
-								<div class="image-dropzone__placeholder">
+								<div
+									class="image-dropzone__placeholder"
+									role="button"
+									tabindex="0"
+									(click)="triggerCoverImageSelect(coverImageInput)"
+									(keydown.enter)="triggerCoverImageSelect(coverImageInput)"
+									(keydown.space)="$event.preventDefault(); triggerCoverImageSelect(coverImageInput)"
+								>
 									<p>Arrastra una imagen o haz clic para cargarla.</p>
 									<span>PNG, JPG o WEBP hasta 10 MB.</span>
 								</div>
@@ -174,33 +199,18 @@
 						@if (coverImageFile) {
 							<small class="hint">Archivo: {{ coverImageFile.name }}</small>
 						}
-					</label>
-
-					<label class="field">
-						<span>Tags</span>
-						<input type="text" formControlName="tags" placeholder="Ej. cocina, basico" />
-					</label>
-
-					<label class="field">
-						<span>Idioma</span>
-						<input type="text" formControlName="language" placeholder="Ej. Espanol" />
-					</label>
+					</div>
 				</div>
 
-				@if (saveSuccess()) {
-					<div class="form-feedback success">{{ saveSuccess() }}</div>
-				}
-				@if (saveError()) {
-					<div class="form-feedback error">{{ saveError() }}</div>
-				}
-
-				<div class="edit-actions">
-					<button type="submit" [disabled]="isSaving()">
-						{{ isSaving() ? 'Guardando...' : 'Actualizar curso' }}
-					</button>
-					<button type="button" class="ghost" (click)="clearSelection()">Cancelar</button>
+						<div class="edit-actions">
+							<button type="submit" [disabled]="isSaving()">
+								{{ isSaving() ? 'Guardando...' : 'Actualizar curso' }}
+							</button>
+							<button type="button" class="ghost" (click)="clearSelection()">Cancelar</button>
+						</div>
+					</form>
 				</div>
-			</form>
+			</div>
 		}
 	}
 
@@ -242,13 +252,6 @@
 							<small>Minimo 5 caracteres.</small>
 						}
 					</label>
-
-					@if (modalSuccess()) {
-						<div class="form-feedback success">{{ modalSuccess() }}</div>
-					}
-					@if (modalError()) {
-						<div class="form-feedback error">{{ modalError() }}</div>
-					}
 
 					<div class="edit-actions">
 						<button type="submit" [disabled]="isSubmittingModule()">
@@ -367,13 +370,6 @@
 						<input type="url" formControlName="fileUrl" placeholder="https://" />
 					</label>
 
-					@if (modalSuccess()) {
-						<div class="form-feedback success">{{ modalSuccess() }}</div>
-					}
-					@if (modalError()) {
-						<div class="form-feedback error">{{ modalError() }}</div>
-					}
-
 					<div class="edit-actions">
 						<button type="submit" [disabled]="isSubmittingLesson()">
 							{{ isSubmittingLesson() ? 'Guardando...' : 'Crear leccion' }}
@@ -438,13 +434,6 @@
 							<small>Minimo 5 caracteres.</small>
 						}
 					</label>
-
-					@if (modalSuccess()) {
-						<div class="form-feedback success">{{ modalSuccess() }}</div>
-					}
-					@if (modalError()) {
-						<div class="form-feedback error">{{ modalError() }}</div>
-					}
 
 					<div class="edit-actions">
 						<button type="submit" [disabled]="isSubmittingModuleUpdate()">

@@ -2,18 +2,19 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { finalize } from 'rxjs';
+import { ToastService } from '../../../../../core/services/toast.service';
 import {
   CourseCreatePayload,
   CourseCategory,
   CuisineType,
   DifficultyLevel
-} from '../../../../shared/interfaces/course';
+} from '../../../../../shared/interfaces/course';
 import {
   COURSE_CATEGORY_OPTIONS,
   CUISINE_OPTIONS,
   DIFFICULTY_OPTIONS
-} from '../../../../core/constants/course-options';
-import { CreatorService } from '../../services/creator.service';
+} from '../../../../../core/constants/course-options';
+import { CreatorService } from '../../../services/creator.service';
 
 @Component({
   selector: 'app-course-manager',
@@ -25,11 +26,9 @@ import { CreatorService } from '../../services/creator.service';
 export class CourseManager {
   private fb = inject(FormBuilder);
   private creatorService = inject(CreatorService);
+  private toastService = inject(ToastService);
 
   isSubmitting = signal(false);
-  successMessage = signal<string | null>(null);
-  errorMessage = signal<string | null>(null);
-
   readonly difficultyOptions: DifficultyLevel[] = DIFFICULTY_OPTIONS;
   readonly categoryOptions: CourseCategory[] = COURSE_CATEGORY_OPTIONS;
   readonly cuisineOptions: CuisineType[] = CUISINE_OPTIONS;
@@ -43,9 +42,6 @@ export class CourseManager {
   });
 
   onSubmit(): void {
-    this.successMessage.set(null);
-    this.errorMessage.set(null);
-
     if (this.courseForm.invalid) {
       this.courseForm.markAllAsTouched();
       return;
@@ -58,8 +54,8 @@ export class CourseManager {
       .createCourse(payload)
       .pipe(finalize(() => this.isSubmitting.set(false)))
       .subscribe({
-        next: (response) => {
-          this.successMessage.set(`Curso creado con ID ${response.id}.`);
+        next: () => {
+          this.toastService.showSuccess('Curso creado exitosamente.');
           this.courseForm.reset({
             title: '',
             description: '',
@@ -69,7 +65,7 @@ export class CourseManager {
           });
         },
         error: () => {
-          this.errorMessage.set('No se pudo crear el curso. Intenta de nuevo.');
+          this.toastService.showError('No se pudo crear el curso. Intenta de nuevo.');
         }
       });
   }

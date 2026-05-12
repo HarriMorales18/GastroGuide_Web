@@ -93,4 +93,11 @@ export class CreatorService {
   requestVerification(id: number | string): Observable<any> {
     return this.http.post<any>(`${environment.apiBaseUrl}/api/courses/${id}/verification-requests`, {});
   }
+
+  updateCourseState(id: number | string, state: 'DRAFT' | 'PUBLISHED'): Observable<{ courseId: number | string; state: string }> {
+    return this.http.patch<{ courseId: number | string; state: string }>(
+      `${environment.apiBaseUrl}/api/courses/${id}/state`,
+      { state }
+    );
+  }
 }

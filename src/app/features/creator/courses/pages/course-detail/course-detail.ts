@@ -17,6 +17,7 @@ export class CourseDetailComponent implements OnInit {
 
   courseData = signal<any>(null);
   isSubmitting = signal(false);
+  isPublishing = signal(false);
   isVideoOpen = signal(false);
   activeVideoUrl = signal<string | null>(null);
   activeVideoTitle = signal<string | null>(null);
@@ -39,6 +40,32 @@ export class CourseDetailComponent implements OnInit {
         this.isSubmitting.set(false);
       },
       error: () => this.isSubmitting.set(false)
+    });
+  }
+
+  publishCourse(): void {
+    const course = this.courseData()?.course;
+    if (!course?.id) {
+      return;
+    }
+
+    this.isPublishing.set(true);
+    this.creatorService.updateCourseState(course.id, 'PUBLISHED').subscribe({
+      next: (response) => {
+        this.courseData.update((data) =>
+          data
+            ? {
+                ...data,
+                course: {
+                  ...data.course,
+                  state: response.state ?? 'PUBLISHED'
+                }
+              }
+            : data
+        );
+        this.isPublishing.set(false);
+      },
+      error: () => this.isPublishing.set(false)
     });
   }
 

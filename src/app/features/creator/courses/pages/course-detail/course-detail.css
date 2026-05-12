@@ -22,6 +22,13 @@
     margin-bottom: 2.5rem;
 }
 
+.header-actions {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
 /* Título principal con DM Serif Display (Como en la captura) */
 .header h1 { 
     font-family: 'DM Serif Display', serif;
@@ -66,6 +73,29 @@ button.primary:hover:not(:disabled) {
 }
 
 button.primary:disabled { opacity: 0.5; cursor: not-allowed; filter: grayscale(0.8); }
+
+button.ghost {
+    background: rgba(231, 76, 60, 0.08);
+    border: 1px solid rgba(231, 76, 60, 0.4);
+    color: var(--color-error);
+    padding: 0.85rem 1.6rem;
+    border-radius: 12px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: not-allowed;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+button.ghost:not(:disabled) {
+    cursor: pointer;
+}
+
+button.ghost:hover:not(:disabled) {
+    background: rgba(231, 76, 60, 0.16);
+    border-color: var(--color-error);
+    color: var(--color-error);
+}
 
 /* La "Tabla" de cristal */
 .table {

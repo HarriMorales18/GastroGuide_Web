@@ -15,11 +15,32 @@
         </div>
       </div>
       
-      <button class="primary" 
-              (click)="requestVerification()" 
-              [disabled]="isSubmitting() || courseData().course.state !== 'DRAFT'">
-        {{ courseData().course.state === 'DRAFT' ? 'Solicitar Publicación' : 'Curso Publicado' }}
-      </button>
+      <div class="header-actions">
+        <button
+          class="primary"
+          type="button"
+          (click)="courseData().course.isVerified ? publishCourse() : requestVerification()"
+          [disabled]="
+            isSubmitting() ||
+            isPublishing() ||
+            courseData().course.state === 'PUBLISHED'
+          "
+        >
+          {{
+            courseData().course.state === 'PUBLISHED'
+              ? 'Curso Publicado'
+              : (courseData().course.isVerified ? 'Publicar curso' : 'Solicitar Publicación')
+          }}
+        </button>
+        <button
+          class="ghost"
+          type="button"
+          *ngIf="courseData().course.state === 'PUBLISHED'"
+          disabled
+        >
+          Archivar curso
+        </button>
+      </div>
     </header>
 
     <div class="table">

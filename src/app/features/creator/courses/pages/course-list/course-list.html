@@ -1,0 +1,35 @@
+<section class="creator-courses">
+  <header class="header">
+    <div class="header-text">
+      <p class="kicker">Panel de Creador</p>
+      <h1>Cursos creados</h1>
+      <p class="subtitle">Gestiona los cursos creados y revisa su información principal.</p>
+    </div>
+  </header>
+
+  <div class="course-grid" *ngIf="!isLoading()">
+    <div class="course-card" *ngFor="let course of courses()" (click)="goToDetails(course.id)">
+      <div class="course-image-wrapper">
+        <img [src]="course.coverImageUrl || 'assets/placeholder.jpg'" class="course-image" alt="Portada">
+        <span class="status-badge" [attr.data-state]="course.state">{{ course.state }}</span>
+      </div>
+      
+      <div class="course-content">
+        <h3 class="course-title">{{ course.title }}</h3>
+        <p class="course-description">{{ course.description }}</p>
+        
+        <div class="course-footer">
+          <div class="meta-info">
+            <span class="meta-label">Nivel</span>
+            <span class="meta-value">{{ course.difficultyLevel }}</span>
+          </div>
+          <strong class="course-price">{{ course.price | currency }}</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="state" *ngIf="isLoading()">
+    <div class="spinner"></div>
+  </div>
+</section>

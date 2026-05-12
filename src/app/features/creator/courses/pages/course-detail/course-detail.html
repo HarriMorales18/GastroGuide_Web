@@ -1,0 +1,109 @@
+<section class="creator-courses">
+  <div class="detail-container" *ngIf="courseData(); else loading">
+    
+    <header class="header anime-item">
+      <div class="header-text">
+        <p class="kicker">Panel de Control de Curso</p>
+        <h1>{{ courseData().course.title }}</h1>
+        <div class="status-group">
+          <span class="badge" [attr.data-state]="courseData().course.state">
+            {{ courseData().course.state }}
+          </span>
+          <span class="badge-verify" *ngIf="courseData().course.isVerified">
+            <i class="icon-check"></i> Verificado por GastroGuide
+          </span>
+        </div>
+      </div>
+      
+      <button class="primary" 
+              (click)="requestVerification()" 
+              [disabled]="isSubmitting() || courseData().course.state !== 'DRAFT'">
+        {{ courseData().course.state === 'DRAFT' ? 'Solicitar Publicación' : 'Curso Publicado' }}
+      </button>
+    </header>
+
+    <div class="table">
+      <div class="course-hero">
+        <div class="banner-wrapper">
+          <img [src]="courseData().course.coverImageUrl" class="course-banner" alt="Portada">
+        </div>
+        
+        <div class="specs-grid">
+          <div class="spec-item">
+            <span class="spec-label">Categoría</span>
+            <span class="spec-value">{{ courseData().course.category }}</span>
+          </div>
+          <div class="spec-item">
+            <span class="spec-label">Nivel</span>
+            <span class="spec-value">{{ courseData().course.difficultyLevel }}</span>
+          </div>
+          <div class="spec-item">
+            <span class="spec-label">Tipo de Cocina</span>
+            <span class="spec-value">{{ courseData().course.cuisineType }}</span>
+          </div>
+          <div class="spec-item">
+            <span class="spec-label">Idioma</span>
+            <span class="spec-value">{{ courseData().course.language || 'No especificado' }}</span>
+          </div>
+          <div class="spec-item">
+            <span class="spec-label">Precio</span>
+            <span class="spec-value price">
+              {{ courseData().course.isFree ? 'Gratis' : (courseData().course.price | currency) }}
+            </span>
+          </div>
+          <div class="spec-item">
+            <span class="spec-label">Duración</span>
+            <span class="spec-value">{{ courseData().course.estimatedDurationMinutes }} min</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-section">
+        <h3>Descripción general</h3>
+        <p class="description-text">{{ courseData().course.description }}</p>
+        
+        <div class="tags-row" *ngIf="courseData().course.tags">
+          <span class="tag" *ngFor="let tag of courseData().course.tags.split(',')">
+            #{{ tag.trim() }}
+          </span>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <div class="curriculum-section">
+        <h3>Contenido del programa</h3>
+        
+        <div class="module-card" *ngFor="let module of courseData().modules">
+          <div class="module-header">
+            <div class="module-info">
+              <h4>{{ module.title }}</h4>
+              <p>{{ module.description }}</p>
+            </div>
+            <span class="module-badge">{{ module.lessons.length }} lecciones</span>
+          </div>
+          
+          <ul class="lesson-list">
+            <li *ngFor="let lesson of module.lessons">
+              <span class="lesson-type-icon">▶</span>
+              <div class="lesson-main">
+                <span class="lesson-title">{{ lesson.title }}</span>
+                <div class="lesson-meta">
+                  <span class="type-tag">{{ lesson.lessonType }}</span>
+                  <span class="preview-tag" *ngIf="lesson.isFreePreview">Vista Previa</span>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #loading>
+    <div class="state">
+      <div class="spinner"></div>
+      <p>Cargando información del curso...</p>
+    </div>
+  </ng-template>
+</section>

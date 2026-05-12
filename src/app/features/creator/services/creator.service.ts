@@ -83,4 +83,14 @@ export class CreatorService {
       responseType: 'text'
     });
   }
+
+  // Obtener detalles completos
+  getCourseDetails(id: number | string): Observable<any> {
+    return this.http.get<any>(`${environment.apiBaseUrl}/api/courses/${id}/details`);
+  }
+
+  // Solicitar publicación
+  requestVerification(id: number | string): Observable<any> {
+    return this.http.post<any>(`${environment.apiBaseUrl}/api/courses/${id}/verification-requests`, {});
+  }
 }

@@ -2,6 +2,7 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { CreatorService } from '../../../services/creator.service';
+import { environment } from '../../../../../../environments/environment';
 
 @Component({
   selector: 'app-course-detail',
@@ -16,6 +17,9 @@ export class CourseDetailComponent implements OnInit {
 
   courseData = signal<any>(null);
   isSubmitting = signal(false);
+  isVideoOpen = signal(false);
+  activeVideoUrl = signal<string | null>(null);
+  activeVideoTitle = signal<string | null>(null);
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
@@ -36,5 +40,39 @@ export class CourseDetailComponent implements OnInit {
       },
       error: () => this.isSubmitting.set(false)
     });
+  }
+
+  openVideo(lesson: { videoUrl?: string | null; title?: string | null }): void {
+    const url = lesson?.videoUrl?.trim();
+    if (!url) {
+      return;
+    }
+    this.activeVideoUrl.set(this.resolveMediaUrl(url));
+    this.activeVideoTitle.set(lesson?.title ?? 'Video del curso');
+    this.isVideoOpen.set(true);
+  }
+
+  closeVideo(): void {
+    this.isVideoOpen.set(false);
+    this.activeVideoUrl.set(null);
+    this.activeVideoTitle.set(null);
+  }
+
+  resolveCoverImage(url?: string | null): string {
+    if (!url || url.trim() === '' || url === 'string') {
+      return '/logo.svg';
+    }
+
+    return this.resolveMediaUrl(url);
+  }
+
+  private resolveMediaUrl(url: string): string {
+    if (/^(https?:)?\/\//i.test(url) || url.startsWith('data:') || url.startsWith('blob:')) {
+      return url;
+    }
+
+    const baseUrl = environment.apiBaseUrl.replace(/\/$/, '');
+    const normalizedPath = url.startsWith('/') ? url : `/${url}`;
+    return `${baseUrl}${normalizedPath}`;
   }
 }

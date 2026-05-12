@@ -44,6 +44,17 @@ export interface AdminUserSummary {
   isVerified: boolean;
 }
 
+export interface CourseRequest {
+  id: number;
+  courseId: number;
+  status: RequestStatus;
+  requestedAt: string;
+  reviewedAt: string | null;
+  notes: string | null;
+  courseTitle?: string; 
+  creatorName?: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -88,5 +99,23 @@ export class AdminService {
     });
 
     return this.http.get(`${environment.apiBaseUrl}/api/users`, { params });
+  }
+
+    getCourseRequests(): Observable<CourseRequest[]> {
+    return this.http.get<CourseRequest[]>(`${environment.apiBaseUrl}/api/admin/requests/courses`);
+  }
+
+  approveCourseRequest(requestId: number): Observable<RequestActionResponse> {
+    return this.http.patch<RequestActionResponse>(
+      `${environment.apiBaseUrl}/api/admin/requests/courses/${requestId}/approve`,
+      {}
+    );
+  }
+
+  rejectCourseRequest(requestId: number, reason: string): Observable<RequestActionResponse> {
+    return this.http.patch<RequestActionResponse>(
+      `${environment.apiBaseUrl}/api/admin/requests/courses/${requestId}/reject`,
+      { reason }
+    );
   }
 }

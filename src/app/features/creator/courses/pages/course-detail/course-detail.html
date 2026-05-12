@@ -25,7 +25,7 @@
     <div class="table">
       <div class="course-hero">
         <div class="banner-wrapper">
-          <img [src]="courseData().course.coverImageUrl" class="course-banner" alt="Portada">
+          <img [src]="resolveCoverImage(courseData().course.coverImageUrl)" class="course-banner" alt="Portada">
         </div>
         
         <div class="specs-grid">
@@ -85,7 +85,15 @@
           
           <ul class="lesson-list">
             <li *ngFor="let lesson of module.lessons">
-              <span class="lesson-type-icon">▶</span>
+              <button
+                class="lesson-play"
+                type="button"
+                [disabled]="!lesson.videoUrl"
+                (click)="openVideo(lesson)"
+                aria-label="Reproducir video"
+              >
+                ▶
+              </button>
               <div class="lesson-main">
                 <span class="lesson-title">{{ lesson.title }}</span>
                 <div class="lesson-meta">
@@ -95,6 +103,24 @@
               </div>
             </li>
           </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="video-modal" *ngIf="isVideoOpen()">
+      <div class="video-modal__backdrop" (click)="closeVideo()"></div>
+      <div class="video-modal__panel" role="dialog" aria-modal="true">
+        <header class="video-modal__header">
+          <h3>{{ activeVideoTitle() }}</h3>
+          <button class="video-modal__close" type="button" (click)="closeVideo()">Cerrar</button>
+        </header>
+        <div class="video-modal__body">
+          <video
+            class="video-player"
+            [src]="activeVideoUrl()"
+            controls
+            autoplay
+          ></video>
         </div>
       </div>
     </div>

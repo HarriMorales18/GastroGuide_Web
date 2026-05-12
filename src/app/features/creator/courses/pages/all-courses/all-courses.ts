@@ -471,8 +471,13 @@ export class AllCourses implements OnInit {
 
   private buildCourseFormData(payload: CourseUpdatePayload, coverImageFile: File | null): FormData {
     const formData = new FormData();
-    const dtoBlob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
-    formData.append('dto', dtoBlob);
+    formData.append('title', payload.title);
+    formData.append('description', payload.description);
+    formData.append('difficultyLevel', payload.difficultyLevel);
+    formData.append('category', payload.category);
+    formData.append('cuisineType', payload.cuisineType);
+    formData.append('tags', payload.tags ?? '');
+    formData.append('language', payload.language ?? '');
     if (coverImageFile) {
       formData.append('image', coverImageFile);
     }

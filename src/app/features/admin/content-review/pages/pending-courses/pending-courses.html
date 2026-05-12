@@ -1,1 +1,55 @@
-<p>pending-courses works!</p>
+<section class="admin-requests">
+  <header class="header">
+    <div class="header-text">
+      <p class="kicker">Administración</p>
+      <h1>Cursos Pendientes</h1>
+      <p class="subtitle">Listado de contenidos que requieren revisión antes de ser publicados.</p>
+    </div>
+  </header>
+
+  <div class="table" *ngIf="!isLoading()">
+    <div class="table-row table-head">
+      <div class="cell">ID Solicitud</div>
+      <div class="cell">ID Curso</div>
+      <div class="cell">Fecha</div>
+      <div class="cell">Estado</div>
+      <div class="cell">Acciones</div>
+    </div>
+
+    <div *ngFor="let request of requests()">
+      <div class="table-row">
+        <div class="cell mono" data-label="ID Solicitud">#{{ request.id }}</div>
+        <div class="cell" data-label="ID Curso">
+          <span class="badge">{{ request.courseId }}</span>
+        </div>
+        <div class="cell" data-label="Fecha">
+          {{ request.requestedAt | date:'mediumDate' }}
+        </div>
+        <div class="cell" data-label="Estado">
+          <span class="badge pending">PENDIENTE</span>
+        </div>
+        <div class="actions">
+          <button class="action approve" (click)="handleApprove(request.id)">Aprobar</button>
+          <button class="action reject" (click)="selectedRequestId.set(request.id)">Rechazar</button>
+        </div>
+      </div>
+
+      <div class="reject-box" *ngIf="selectedRequestId() === request.id">
+        <textarea #reasonText placeholder="Indica el motivo del rechazo..."></textarea>
+        <div class="actions">
+          <button class="action reject" (click)="handleReject(request.id, reasonText.value)">Confirmar Rechazo</button>
+          <button class="action ghost" (click)="selectedRequestId.set(null)">Cancelar</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="state empty" *ngIf="requests().length === 0">
+      <p>No hay cursos pendientes de revisión.</p>
+    </div>
+  </div>
+
+  <div class="state" *ngIf="isLoading()">
+    <div class="spinner"></div>
+    <p>Cargando solicitudes...</p>
+  </div>
+</section>

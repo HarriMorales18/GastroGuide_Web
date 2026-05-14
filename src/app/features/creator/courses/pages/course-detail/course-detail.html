@@ -115,10 +115,11 @@
               <select formControlName="accessModel">
                 <option value="FREE">Gratis</option>
                 <option value="PAID">Pago único</option>
+                <option value="FREMIUM">Fremium</option>
               </select>
             </div>
 
-            <div class="field" *ngIf="accessForm.get('accessModel')?.value === 'PAID'">
+            <div class="field" *ngIf="accessForm.get('accessModel')?.value !== 'FREE'">
               <label>Precio</label>
               <input type="number" formControlName="price" min="0" placeholder="0">
             </div>
@@ -160,8 +161,9 @@
                     <span class="preview-tag" *ngIf="lesson.isFreePreview">Vista Previa</span>
                     <span
                       class="access-badge"
-                      [ngClass]="{ 'free': isLessonFree(lesson), 'paid': !isLessonFree(lesson), 'clickable': (courseData()?.course?.accessModel === 'PAID' || !courseData()?.course?.isFree) }
-                      "
+                      [class.free]="isLessonFree(lesson)"
+                      [class.paid]="!isLessonFree(lesson)"
+                      [class.clickable]="courseData()?.course?.accessModel !== 'FREE' && !courseData()?.course?.isFree"
                       (click)="onAccessBadgeClick(lesson, $event)"
                       title="Haga clic para alternar Gratis/Pago"
                       >

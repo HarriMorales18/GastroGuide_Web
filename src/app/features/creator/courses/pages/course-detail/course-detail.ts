@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { CreatorService } from '../../../services/creator.service';
 import { environment } from '../../../../../../environments/environment';
 import { ToastService } from '../../../../../core/services/toast.service';
+import { AccessModel } from '../../../../../shared/interfaces/course';
 
 @Component({
   selector: 'app-course-detail',
@@ -30,19 +31,24 @@ export class CourseDetailComponent implements OnInit {
 
   ngOnInit() {
     this.accessForm = this.fb.group({
-      accessModel: ['FREE', Validators.required],
+      accessModel: ['FREE' as AccessModel, Validators.required],
       price: [0, [Validators.min(0)]],
       freeLessonIds: [[]]
     });
 
     this.accessForm.get('accessModel')?.valueChanges.subscribe((value) => {
       const priceControl = this.accessForm.get('price');
+      const freeLessonIdsControl = this.accessForm.get('freeLessonIds');
       if (!priceControl) return;
-      if (value === 'PAID') {
-        priceControl.setValidators([Validators.required, Validators.min(0)]);
-      } else {
+      if (value === 'FREE') {
         priceControl.setValue(0, { emitEvent: false });
         priceControl.clearValidators();
+        freeLessonIdsControl?.setValue([], { emitEvent: false });
+      } else {
+        priceControl.setValidators([Validators.required, Validators.min(0)]);
+        if (value === 'PAID') {
+          freeLessonIdsControl?.setValue([], { emitEvent: false });
+        }
       }
       priceControl.updateValueAndValidity({ emitEvent: false });
     });
@@ -60,7 +66,7 @@ export class CourseDetailComponent implements OnInit {
     const course = data?.course;
     if (!course) return;
 
-    const accessModel = course.accessModel || (course.isFree ? 'FREE' : 'PAID');
+    const accessModel = this.resolveAccessModel(course, data?.modules || []);
     const price = typeof course.price === 'number' ? course.price : 0;
     const freeLessonIds = Array.isArray(course.freeLessonIds)
       ? course.freeLessonIds
@@ -74,6 +80,22 @@ export class CourseDetailComponent implements OnInit {
       },
       { emitEvent: false }
     );
+  }
+
+  private resolveAccessModel(course: any, modules: Array<any>): AccessModel {
+    if (course?.accessModel === 'FREE' || course?.accessModel === 'PAID' || course?.accessModel === 'FREMIUM') {
+      return course.accessModel;
+    }
+
+    if (course?.isFree) {
+      return 'FREE';
+    }
+
+    const freeLessonIds = Array.isArray(course?.freeLessonIds)
+      ? course.freeLessonIds
+      : this.getFreeLessonIdsFromModules(modules);
+
+    return freeLessonIds.length > 0 ? 'FREMIUM' : 'PAID';
   }
 
   private getFreeLessonIdsFromModules(modules: Array<any>): Array<number | string> {
@@ -103,15 +125,18 @@ export class CourseDetailComponent implements OnInit {
     return ids.includes(lessonId);
   }
 
-  toggleFreeLesson(lessonId: number | string): void {
+  toggleFreeLesson(lessonId: number | string): Array<number | string> {
     const control = this.accessForm.get('freeLessonIds');
-    if (!control) return;
+    if (!control) return [];
     const current: Array<number | string> = control.value || [];
+    let next: Array<number | string>;
     if (current.includes(lessonId)) {
-      control.setValue(current.filter((id) => id !== lessonId));
+      next = current.filter((id) => id !== lessonId);
     } else {
-      control.setValue([...current, lessonId]);
+      next = [...current, lessonId];
     }
+    control.setValue(next);
+    return next;
   }
 
   saveAccess(): void {
@@ -119,10 +144,16 @@ export class CourseDetailComponent implements OnInit {
     if (this.accessForm.invalid) return;
 
     const courseId = this.courseData().course.id;
-    const accessModel = this.accessForm.get('accessModel')?.value || 'FREE';
+    const accessModel = (this.accessForm.get('accessModel')?.value || 'FREE') as AccessModel;
     const priceValue = Number(this.accessForm.get('price')?.value || 0);
-    const freeLessonIds = (this.accessForm.get('freeLessonIds')?.value || [])
-      .map((id: number | string) => Number(id));
+    const freeLessonIds = accessModel === 'FREMIUM'
+      ? (this.accessForm.get('freeLessonIds')?.value || []).map((id: number | string) => Number(id))
+      : [];
+
+    if (accessModel === 'FREMIUM' && freeLessonIds.length === 0) {
+      this.toastService.showError('Selecciona al menos una lección para el modo Fremium');
+      return;
+    }
 
     const payload = {
       accessModel,
@@ -167,7 +198,8 @@ export class CourseDetailComponent implements OnInit {
   isLessonFree(lesson: any): boolean {
     const course = this.courseData()?.course;
     if (!lesson) return false;
-    if (course?.isFree) return true;
+    if (course?.accessModel === 'FREE' || course?.isFree) return true;
+    if (course?.accessModel === 'PAID') return false;
     const freeIds = course?.freeLessonIds || [];
     if (Array.isArray(freeIds) && freeIds.includes(lesson.id)) return true;
     return !!lesson.isFreePreview;
@@ -178,33 +210,43 @@ export class CourseDetailComponent implements OnInit {
     const course = this.courseData()?.course;
     if (!course) return;
 
-    // Only allow toggling when course is PAID
-    if (course.accessModel === 'PAID' || !course.isFree) {
-      this.toggleFreeLesson(lesson.id);
-
-      // Update in-memory courseData so badge updates immediately
-      this.courseData.update((data) => {
-        if (!data) return data;
-        const freeIds = this.accessForm.get('freeLessonIds')?.value || [];
-        return {
-          ...data,
-          course: {
-            ...data.course,
-            freeLessonIds: freeIds
-          },
-          modules: (data.modules || []).map((mod: any) => ({
-            ...mod,
-            lessons: (mod.lessons || []).map((l: any) => ({
-              ...l,
-              isFreePreview: freeIds.includes(l.id)
-            }))
-          }))
-        };
-      });
-    } else {
-      // If course is FREE, nothing to toggle; inform user
+    if (course.accessModel === 'FREE' || course.isFree) {
       this.toastService.showInfo('El curso es gratuito; todas las lecciones están disponibles.');
+      return;
     }
+
+    const currentAccessModel = (this.accessForm.get('accessModel')?.value || 'PAID') as AccessModel;
+    const freeIds = this.toggleFreeLesson(lesson.id);
+    const nextAccessModel: AccessModel =
+      currentAccessModel === 'PAID' && freeIds.length > 0
+        ? 'FREMIUM'
+        : currentAccessModel === 'FREMIUM' && freeIds.length === 0
+          ? 'PAID'
+          : currentAccessModel;
+
+    if (nextAccessModel !== currentAccessModel) {
+      this.accessForm.get('accessModel')?.setValue(nextAccessModel);
+    }
+
+    this.courseData.update((data) => {
+      if (!data) return data;
+      return {
+        ...data,
+        course: {
+          ...data.course,
+          accessModel: nextAccessModel,
+          isFree: nextAccessModel === 'FREE',
+          freeLessonIds: freeIds
+        },
+        modules: (data.modules || []).map((mod: any) => ({
+          ...mod,
+          lessons: (mod.lessons || []).map((l: any) => ({
+            ...l,
+            isFreePreview: freeIds.includes(l.id)
+          }))
+        }))
+      };
+    });
   }
 
   requestVerification() {

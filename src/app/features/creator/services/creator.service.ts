@@ -3,6 +3,7 @@ import { HttpBackend, HttpClient, HttpHeaders, HttpParams } from '@angular/commo
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import {
+  AccessModel,
   CourseCreatePayload,
   CourseCreateResponse,
   CourseSummary,
@@ -103,17 +104,17 @@ export class CreatorService {
 
   updateCourseAccess(
     id: number | string,
-    payload: { accessModel: 'FREE' | 'PAID'; price: number; freeLessonIds: Array<number | string> }
+    payload: { accessModel: AccessModel; price: number; freeLessonIds: Array<number | string> }
   ): Observable<{
     courseId: number | string;
-    accessModel: 'FREE' | 'PAID';
+    accessModel: AccessModel;
     price: number;
     isFree: boolean;
     freeLessonIds: Array<number | string>;
   }> {
     return this.http.patch<{
       courseId: number | string;
-      accessModel: 'FREE' | 'PAID';
+      accessModel: AccessModel;
       price: number;
       isFree: boolean;
       freeLessonIds: Array<number | string>;

@@ -23,6 +23,8 @@ export type CuisineType =
 	| 'ITALIAN'
 	| 'ASIAN';
 
+export type AccessModel = 'FREE' | 'PAID' | 'FREMIUM';
+
 export interface CourseCreatePayload {
 	title: string;
 	description: string;

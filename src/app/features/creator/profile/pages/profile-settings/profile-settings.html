@@ -1,0 +1,77 @@
+<div class="profile-container">
+  <header class="profile-header">
+    <div>
+      <p class="eyebrow">Perfil del creador</p>
+      <h1>Mi Perfil</h1>
+      <p class="subtitle">Gestiona tu información personal y profesional.</p>
+    </div>
+  </header>
+
+  <div class="profile-card" [class.editing]="isEditing()">
+    <form [formGroup]="profileForm">
+      <div class="avatar-section">
+        <div class="avatar-wrapper">
+          <img [src]="imagePreview() || 'assets/placeholder-user.png'" alt="Avatar">
+          <label class="upload-overlay" *ngIf="isEditing()">
+            <input type="file" (change)="onFileSelected($event)" accept="image/*" hidden>
+            <i class="pi pi-camera"></i>
+          </label>
+        </div>
+        <div class="avatar-info">
+          <h2>{{ profileForm.get('firstName')?.value }} {{ profileForm.get('lastName')?.value }}</h2>
+          <div class="meta-row">
+            <span class="role-badge">Creador Verificado</span>
+            <span class="meta-dot"></span>
+            <span class="meta-text">Edicion segura</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="input-group">
+          <label>Nombre</label>
+          <input type="text" formControlName="firstName" placeholder="Tu nombre">
+        </div>
+
+        <div class="input-group">
+          <label>Apellido</label>
+          <input type="text" formControlName="lastName" placeholder="Tu apellido">
+        </div>
+
+        <div class="input-group">
+          <label>Nombre publico (Display Name)</label>
+          <input type="text" formControlName="displayName" placeholder="Ej: Chef Juan">
+        </div>
+
+        <div class="input-group">
+          <label>Email</label>
+          <input type="email" formControlName="email">
+        </div>
+
+        <div class="input-group full-width">
+          <label>Biografia profesional</label>
+          <textarea formControlName="bio" rows="4" placeholder="Cuentanos sobre tu experiencia culinaria..."></textarea>
+        </div>
+
+        <div class="input-group">
+          <label>Especialidad</label>
+          <input type="text" formControlName="specialization" placeholder="Ej: Reposteria Francesa">
+        </div>
+
+        <div class="input-group">
+          <label>Telefono</label>
+          <input type="text" formControlName="phoneNumber">
+        </div>
+      </div>
+
+      <div class="actions-footer">
+        <button type="button" class="btn-edit" (click)="toggleEdit()" [class.save]="isEditing()">
+          {{ isEditing() ? 'Guardar cambios' : 'Editar perfil' }}
+        </button>
+        <button type="button" class="btn-cancel" *ngIf="isEditing()" (click)="cancelEdit()">
+          Cancelar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

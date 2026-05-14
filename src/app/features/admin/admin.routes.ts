@@ -13,7 +13,7 @@ export const ADMIN_ROUTES: Routes = [
       { path: 'list-all-users', component: ListAllUsers },
       { path: 'status', component: SystemStatus },
       { path: 'courses_requests', component: PendingCourse},
-      { path: '', redirectTo: 'users', pathMatch: 'full' }
+      { path: '', redirectTo: 'list-all-users', pathMatch: 'full' }
     ]
   }
 ];

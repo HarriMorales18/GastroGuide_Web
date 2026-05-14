@@ -22,4 +22,12 @@ export class ToastService {
       closeButton: true
     });
   }
+
+  showInfo(message: string): void {
+    this.toastr.info(message, '', {
+      timeOut: 3000,
+      progressBar: true,
+      closeButton: true
+    });
+  }
 }

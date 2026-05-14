@@ -15,9 +15,11 @@
 .admin-requests {
   min-height: 100vh;
   padding: clamp(2rem, 4vw, 4rem);
-  background: radial-gradient(1200px 700px at 5% 0%, rgba(0, 156, 222, 0.14), transparent 60%),
-    radial-gradient(1000px 620px at 95% 10%, rgba(1, 33, 105, 0.12), transparent 55%),
-    var(--color-bg);
+  background:
+    radial-gradient(circle at top right, rgba(0, 156, 222, 0.24) 0%, rgba(246, 247, 248, 0.93) 42%, rgba(1, 33, 105, 0.1) 100%),
+    radial-gradient(circle at top left, rgba(0, 98, 193, 0.2) 0%, rgba(246, 247, 248, 0.9) 45%, transparent 70%),
+    radial-gradient(circle at bottom left, rgba(0, 156, 222, 0.2) 0%, rgba(246, 247, 248, 0.9) 48%, transparent 72%),
+    radial-gradient(circle at bottom right, rgba(1, 33, 105, 0.22) 0%, rgba(246, 247, 248, 0.9) 48%, transparent 72%);
   font-family: 'Space Grotesk', 'Segoe UI', sans-serif;
   color: var(--ink);
   animation: fadeIn 0.6s ease-out;

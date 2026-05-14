@@ -2,7 +2,11 @@
 
 .course-manager {
 	padding: 32px 28px 48px;
-	background: radial-gradient(circle at top left, rgba(0, 156, 222, 0.12), rgba(246, 247, 248, 0.95) 45%, rgba(1, 33, 105, 0.05) 100%);
+	background:
+		radial-gradient(circle at top right, rgba(0, 156, 222, 0.24) 0%, rgba(246, 247, 248, 0.93) 42%, rgba(1, 33, 105, 0.1) 100%),
+		radial-gradient(circle at top left, rgba(0, 98, 193, 0.2) 0%, rgba(246, 247, 248, 0.9) 45%, transparent 70%),
+		radial-gradient(circle at bottom left, rgba(0, 156, 222, 0.2) 0%, rgba(246, 247, 248, 0.9) 48%, transparent 72%),
+		radial-gradient(circle at bottom right, rgba(1, 33, 105, 0.22) 0%, rgba(246, 247, 248, 0.9) 48%, transparent 72%);
 	min-height: calc(100vh - 64px);
 	color: var(--color-secondary);
 	font-family: 'Manrope', 'Segoe UI', sans-serif;

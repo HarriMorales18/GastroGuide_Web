@@ -1,0 +1,122 @@
+.bank-card {
+	width: 100%;
+	aspect-ratio: 1.6 / 1;
+	border-radius: 18px;
+	padding: 1.5rem;
+	color: #fff;
+	background: linear-gradient(135deg, #2b2b2b, #121212);
+	box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	transition: transform 0.5s ease, background 0.5s ease;
+}
+
+.bank-card[data-brand='VISA'],
+.bank-card.brand-visa {
+	background: linear-gradient(135deg, #1a1f71, #0047ab);
+}
+
+.bank-card[data-brand='MASTERCARD'],
+.bank-card.brand-mastercard {
+	background: linear-gradient(135deg, #ea001b, #f79e1b);
+}
+
+.bank-card[data-brand='AMEX'],
+.bank-card.brand-amex {
+	background: linear-gradient(135deg, #007bc1, #2e3b4e);
+}
+
+.bank-card[data-brand='DINERS'],
+.bank-card.brand-diners {
+	background: linear-gradient(135deg, #0f4c81, #193b5a);
+}
+
+.bank-card[data-brand='JCB'],
+.bank-card.brand-jcb {
+	background: linear-gradient(135deg, #1a8f5a, #0a4f2a);
+}
+
+.bank-card[data-brand='UNIONPAY'],
+.bank-card.brand-unionpay {
+	background: linear-gradient(135deg, #d60f26, #0c4aa3, #138b4f);
+}
+
+.bank-card[data-brand='BANCOLOMBIA'],
+.bank-card.brand-bancolombia {
+	background: linear-gradient(135deg, #001a57, #f9c300, #e03131);
+}
+
+.bank-card__top {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.chip {
+	width: 44px;
+	height: 32px;
+	border-radius: 8px;
+	background: linear-gradient(135deg, #ffd86a, #caa24b);
+}
+
+.brand-logo {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	width: 160px;
+	height: 36px;
+}
+
+.brand-logo svg {
+	width: 160px;
+	height: 36px;
+}
+
+.logo-text {
+	font-family: 'Space Grotesk', sans-serif;
+	font-weight: 700;
+	font-size: 28px;
+	fill: #fff;
+}
+
+.logo-text-sm {
+	font-family: 'Space Grotesk', sans-serif;
+	font-weight: 600;
+	font-size: 12px;
+	fill: #fff;
+	letter-spacing: 0.6px;
+}
+
+.mc-left { fill: #eb001b; }
+.mc-right { fill: #f79e1b; }
+.amex-box { fill: rgba(255, 255, 255, 0.2); stroke: rgba(255, 255, 255, 0.7); }
+.diners-ring { fill: none; stroke: rgba(255, 255, 255, 0.8); stroke-width: 3; }
+.jcb-box { fill: rgba(255, 255, 255, 0.18); }
+
+.bank-card__number {
+	font-size: 1.2rem;
+	letter-spacing: 2px;
+	font-family: 'Space Grotesk', monospace;
+	text-align: center;
+	margin: 1rem 0;
+}
+
+.bank-card__bottom {
+	display: flex;
+	justify-content: space-between;
+	gap: 1rem;
+}
+
+.meta span {
+	display: block;
+	font-size: 0.65rem;
+	letter-spacing: 1px;
+	opacity: 0.75;
+}
+
+.meta p {
+	margin: 0.2rem 0 0;
+	font-size: 0.85rem;
+	font-weight: 600;
+}

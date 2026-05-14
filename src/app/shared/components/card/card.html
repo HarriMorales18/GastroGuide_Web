@@ -1,0 +1,49 @@
+<div class="bank-card" [attr.data-brand]="brand" [ngClass]="brand ? 'brand-' + brand.toLowerCase() : ''">
+	<div class="bank-card__top">
+		<div class="chip"></div>
+		<div class="brand-logo" [ngSwitch]="brand">
+			<svg *ngSwitchCase="'VISA'" viewBox="0 0 120 40" aria-label="VISA logo" role="img">
+				<text x="0" y="28" class="logo-text">VISA</text>
+			</svg>
+			<svg *ngSwitchCase="'MASTERCARD'" viewBox="0 0 120 40" aria-label="Mastercard logo" role="img">
+				<circle cx="48" cy="20" r="14" class="mc-left"></circle>
+				<circle cx="66" cy="20" r="14" class="mc-right"></circle>
+				<text x="84" y="25" class="logo-text-sm">mastercard</text>
+			</svg>
+			<svg *ngSwitchCase="'AMEX'" viewBox="0 0 120 40" aria-label="American Express logo" role="img">
+				<rect x="0" y="4" width="78" height="32" rx="6" class="amex-box"></rect>
+				<text x="8" y="27" class="logo-text-sm">AMEX</text>
+			</svg>
+			<svg *ngSwitchCase="'DINERS'" viewBox="0 0 120 40" aria-label="Diners Club logo" role="img">
+				<circle cx="28" cy="20" r="15" class="diners-ring"></circle>
+				<text x="52" y="26" class="logo-text-sm">DINERS</text>
+			</svg>
+			<svg *ngSwitchCase="'JCB'" viewBox="0 0 120 40" aria-label="JCB logo" role="img">
+				<rect x="0" y="6" width="70" height="28" rx="4" class="jcb-box"></rect>
+				<text x="10" y="26" class="logo-text-sm">JCB</text>
+			</svg>
+			<svg *ngSwitchCase="'UNIONPAY'" viewBox="0 0 120 40" aria-label="UnionPay logo" role="img">
+				<text x="0" y="26" class="logo-text-sm">UNIONPAY</text>
+			</svg>
+			<svg *ngSwitchCase="'BANCOLOMBIA'" viewBox="0 0 120 40" aria-label="Bancolombia logo" role="img">
+				<text x="0" y="26" class="logo-text-sm">BANCOLOMBIA</text>
+			</svg>
+			<svg *ngSwitchDefault viewBox="0 0 120 40" aria-label="GastroGuide logo" role="img">
+				<text x="0" y="26" class="logo-text-sm">GASTRO</text>
+			</svg>
+		</div>
+	</div>
+
+	<div class="bank-card__number">{{ number || '•••• •••• •••• ••••' }}</div>
+
+	<div class="bank-card__bottom">
+		<div class="meta">
+			<span>TITULAR</span>
+			<p>{{ holder || 'NOMBRE COMPLETO' }}</p>
+		</div>
+		<div class="meta">
+			<span>CUENTA</span>
+			<p>{{ accountType || '---' }}</p>
+		</div>
+	</div>
+</div>

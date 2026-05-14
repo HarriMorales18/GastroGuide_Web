@@ -1,0 +1,65 @@
+<div class="bank-page-wrapper">
+  <header class="main-header">
+    <h1 class="display-title">Pagos y Cobros</h1>
+    <p class="subtitle">Vincula tu cuenta para recibir tus ingresos.</p>
+  </header>
+
+  <div class="bank-content-layout">
+    <div class="visual-column">
+      <div class="card-wrapper">
+        <app-card
+          [brand]="cardType()"
+          [holder]="bankForm.get('accountHolder')?.value"
+          [number]="getAccountNumberDisplay()"
+          [accountType]="getAccountTypeLabel()"
+        ></app-card>
+      </div>
+      
+      <div class="luhn-status" *ngIf="bankForm.get('accountNumber')?.value">
+        <span [class.valid]="isCardValid()">
+          {{ isCardValid() ? '✓ Tarjeta Verificada' : '✗ Número Inválido' }}
+        </span>
+      </div>
+    </div>
+
+    <div class="form-column">
+      <form [formGroup]="bankForm" (ngSubmit)="onSubmit()" class="glass-container">
+        <div class="inputs-grid">
+          
+          <div class="field-full">
+            <label>Nombre del Titular</label>
+            <input type="text" formControlName="accountHolder" placeholder="Ej: Juan Pérez">
+          </div>
+
+          <div class="field-half">
+            <label>Número de Tarjeta/Cuenta</label>
+             <input type="text" formControlName="accountNumber" maxlength="23" placeholder="XXXX XXXX XXXX XXXX">
+          </div>
+
+          <div class="field-half">
+            <label>Franquicia Detectada</label>
+            <input type="text" formControlName="bankName" class="readonly-input" placeholder="Autodetectado..." readonly>
+          </div>
+
+          <div class="field-half">
+            <label>Tipo de Cuenta</label>
+            <select formControlName="accountType">
+              <option value="CHECKING">Corriente</option>
+              <option value="SAVINGS">Ahorros</option>
+            </select>
+          </div>
+
+          <div class="field-half">
+            <label>ID Tributario (NIT/RUT)</label>
+            <input type="text" formControlName="taxId" placeholder="12345678-9">
+          </div>
+
+        </div>
+
+        <button type="submit" class="save-button" [disabled]="bankForm.invalid || !isCardValid()">
+          {{ isLoading() ? 'Procesando...' : 'Guardar Configuración' }}
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

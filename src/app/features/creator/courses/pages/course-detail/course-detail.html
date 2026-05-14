@@ -92,6 +92,44 @@
 
       <hr class="divider">
 
+      <div class="access-section">
+        <div class="access-header">
+          <div>
+            <h3>Acceso y precio</h3>
+            <p class="access-subtitle">Define el modelo de acceso y las lecciones de muestra.</p>
+          </div>
+          <button
+            class="primary"
+            type="button"
+            (click)="saveAccess()"
+            [disabled]="accessForm.invalid || isSavingAccess()"
+          >
+            {{ isSavingAccess() ? 'Guardando...' : 'Guardar acceso' }}
+          </button>
+        </div>
+
+        <form class="access-form" [formGroup]="accessForm">
+          <div class="access-grid">
+            <div class="field">
+              <label>Modelo de acceso</label>
+              <select formControlName="accessModel">
+                <option value="FREE">Gratis</option>
+                <option value="PAID">Pago único</option>
+              </select>
+            </div>
+
+            <div class="field" *ngIf="accessForm.get('accessModel')?.value === 'PAID'">
+              <label>Precio</label>
+              <input type="number" formControlName="price" min="0" placeholder="0">
+            </div>
+
+            <div class="field field--full">
+              <p class="muted">La selección de lecciones de muestra se administra desde la sección "Contenido del programa" abajo. Aquí solo define el modelo y el precio.</p>
+            </div>
+          </div>
+        </form>
+      </div>
+
       <div class="curriculum-section">
         <h3>Contenido del programa</h3>
         
@@ -119,7 +157,16 @@
                 <span class="lesson-title">{{ lesson.title }}</span>
                 <div class="lesson-meta">
                   <span class="type-tag">{{ lesson.lessonType }}</span>
-                  <span class="preview-tag" *ngIf="lesson.isFreePreview">Vista Previa</span>
+                    <span class="preview-tag" *ngIf="lesson.isFreePreview">Vista Previa</span>
+                    <span
+                      class="access-badge"
+                      [ngClass]="{ 'free': isLessonFree(lesson), 'paid': !isLessonFree(lesson), 'clickable': (courseData()?.course?.accessModel === 'PAID' || !courseData()?.course?.isFree) }
+                      "
+                      (click)="onAccessBadgeClick(lesson, $event)"
+                      title="Haga clic para alternar Gratis/Pago"
+                      >
+                      {{ isLessonFree(lesson) ? 'Gratis' : 'Pago' }}
+                    </span>
                 </div>
               </div>
             </li>

@@ -11,9 +11,9 @@
 		@if (role() === 'CREATOR' || section() === 'creator') {
 			<a routerLink="/creator/all-courses" routerLinkActive="active">Cursos</a>
 			<a routerLink="/creator/courses" routerLinkActive="active">Crear Cursos</a>
+			<a routerLink="/creator/course-list" routerLinkActive="active">Lista de Cursos</a>
 			<a routerLink="/creator/revenue" routerLinkActive="active">Ingresos</a>
 			<a routerLink="/creator/analytics" routerLinkActive="active">Analiticas</a>
-			<a routerLink="/creator/course-list" routerLinkActive="active">Lista de Cursos</a>
 		} @else if (role() === 'ADMIN' || section() === 'admin') {
 			<a routerLink="/admin/users" routerLinkActive="active">Usuarios</a>
 			<a routerLink="/admin/list-all-users" routerLinkActive="active">Listar usuarios</a>
@@ -23,6 +23,21 @@
 	</nav>
 
 	<div class="actions" *ngIf="section() !== 'none'">
-		<button type="button" class="logout" (click)="logout()">Cerrar sesion</button>
+		<div class="profile-dropdown-container">
+			<button type="button" class="profile-trigger" (click)="toggleMenu()">
+			<div class="avatar-wrapper">
+				<img [src]="profileImageUrl() || 'assets/placeholder-user.png'" alt="Perfil" class="header-avatar">
+			</div>
+			<span class="chevron" [class.open]="isMenuOpen()">▼</span>
+			</button>
+
+			<div class="dropdown-menu" *ngIf="isMenuOpen()">
+			<a routerLink="/creator/profile" (click)="isMenuOpen.set(false)">Mi Perfil</a>
+			<a routerLink="/creator/bank-account" (click)="isMenuOpen.set(false)">Cuenta Bancaria</a>
+			<div class="divider"></div>
+			
+			<button type="button" class="logout-item" (click)="logout()">Cerrar sesion</button>
+			</div>
+		</div>
 	</div>
 </header>

@@ -3,7 +3,11 @@
 .creator-courses {
     min-height: 100vh;
     padding: clamp(1.5rem, 4vw, 4rem);
-    background: radial-gradient(circle at top right, rgba(0, 156, 222, 0.12) 0%, rgba(246, 247, 248, 0.95) 45%, rgba(1, 33, 105, 0.05) 100%);
+    background:
+        radial-gradient(circle at top right, rgba(0, 156, 222, 0.24) 0%, rgba(246, 247, 248, 0.93) 42%, rgba(1, 33, 105, 0.1) 100%),
+        radial-gradient(circle at top left, rgba(0, 98, 193, 0.2) 0%, rgba(246, 247, 248, 0.9) 45%, transparent 70%),
+        radial-gradient(circle at bottom left, rgba(0, 156, 222, 0.2) 0%, rgba(246, 247, 248, 0.9) 48%, transparent 72%),
+        radial-gradient(circle at bottom right, rgba(1, 33, 105, 0.22) 0%, rgba(246, 247, 248, 0.9) 48%, transparent 72%);
     color: var(--color-secondary);
     /* Aplicamos Space Grotesk como fuente base para todo */
     font-family: 'Space Grotesk', sans-serif;
@@ -180,6 +184,138 @@ button.ghost:hover:not(:disabled) {
 .tag { font-family: 'Space Grotesk', sans-serif; font-weight: 600; color: var(--color-primary); font-size: 0.9rem; }
 
 .divider { border: 0; border-top: 1px solid #e3effa; margin: 3rem 0; }
+
+.access-section {
+    display: grid;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.access-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.access-subtitle {
+    margin: 0.4rem 0 0;
+    color: var(--color-text-light);
+    font-size: 0.95rem;
+}
+
+.access-form {
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(0, 156, 222, 0.2);
+    border-radius: 18px;
+    padding: 1.8rem;
+    box-shadow: 0 18px 40px -28px rgba(1, 33, 105, 0.35);
+}
+
+.access-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.2rem 1.6rem;
+}
+
+.access-form .field {
+    display: grid;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--color-secondary);
+}
+
+.access-form label {
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-light);
+}
+
+.access-form input,
+.access-form select {
+    border-radius: 12px;
+    border: 1px solid rgba(1, 33, 105, 0.18);
+    padding: 0.85rem 1rem;
+    font-size: 0.95rem;
+    background: #f9fbfc;
+    color: var(--color-secondary);
+}
+
+.field--full {
+    grid-column: 1 / -1;
+}
+
+.lesson-selector {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 0.75rem;
+}
+
+.lesson-pill {
+    display: grid;
+    gap: 0.2rem;
+    padding: 0.75rem 0.9rem;
+    border-radius: 14px;
+    border: 1px solid rgba(0, 156, 222, 0.2);
+    background: #ffffff;
+    text-align: left;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.lesson-pill.active {
+    border-color: rgba(0, 156, 222, 0.6);
+    box-shadow: 0 12px 22px -18px rgba(0, 156, 222, 0.6);
+    background: rgba(0, 156, 222, 0.08);
+}
+
+.lesson-pill:hover {
+    transform: translateY(-1px);
+}
+
+.lesson-pill__title {
+    font-weight: 700;
+    color: var(--color-secondary);
+}
+
+.lesson-pill__meta {
+    font-size: 0.75rem;
+    color: var(--color-text-light);
+}
+
+.lesson-empty {
+    padding: 1rem;
+    border-radius: 12px;
+    background: #f5f8fb;
+    color: var(--color-text-light);
+}
+
+.access-badge {
+    display: inline-block;
+    padding: 0.2rem 0.55rem;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-left: 0.6rem;
+    border: 1px solid transparent;
+}
+
+.access-badge.free {
+    background: rgba(30, 143, 99, 0.08);
+    color: #0ca678;
+    border-color: rgba(30, 143, 99, 0.12);
+}
+
+.access-badge.paid {
+    background: rgba(1, 33, 105, 0.04);
+    color: #012169;
+    border-color: rgba(1, 33, 105, 0.06);
+}
+
+.access-badge.clickable { cursor: pointer; }
+.access-badge.clickable:hover { transform: translateY(-2px); box-shadow: 0 10px 18px -12px rgba(0, 48, 135, 0.12); }
 
 /* Módulos */
 .module-card {
@@ -364,4 +500,5 @@ button.ghost:hover:not(:disabled) {
     .course-hero { grid-template-columns: 1fr; }
     .header { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
     button.primary { width: 100%; }
+    .access-header { flex-direction: column; align-items: flex-start; }
 }

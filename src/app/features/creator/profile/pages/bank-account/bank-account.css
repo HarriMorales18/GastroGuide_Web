@@ -1,0 +1,122 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+.bank-page-wrapper {
+  min-height: 100vh;
+  position: relative;
+  padding: 9rem 4rem 4rem 4rem;
+  background:
+    radial-gradient(circle at top right, rgba(0, 156, 222, 0.24) 0%, rgba(246, 247, 248, 0.93) 42%, rgba(1, 33, 105, 0.1) 100%),
+    radial-gradient(circle at top left, rgba(0, 98, 193, 0.2) 0%, rgba(246, 247, 248, 0.9) 45%, transparent 70%),
+    radial-gradient(circle at bottom left, rgba(0, 156, 222, 0.2) 0%, rgba(246, 247, 248, 0.9) 48%, transparent 72%),
+    radial-gradient(circle at bottom right, rgba(1, 33, 105, 0.22) 0%, rgba(246, 247, 248, 0.9) 48%, transparent 72%);
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+/* Header posicionado arriba a la izquierda */
+.main-header {
+  position: absolute;
+  top: 2.8rem;
+  left: 3.5rem;
+}
+
+.display-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 3rem;
+  color: #111;
+  margin: 0;
+}
+
+.subtitle { color: #333; margin-top: 0.3rem; }
+
+/* Layout */
+.bank-content-layout {
+  display: flex;
+  gap: 3.5rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  align-items: center;
+}
+
+/* Columna Visual (Tarjeta más pequeña) */
+.visual-column {
+  flex: 0 0 340px;
+}
+
+.card-wrapper {
+  width: 100%;
+  max-width: 340px;
+}
+
+/* Formulario */
+.form-column {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.glass-container {
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(10px);
+  padding: 2.5rem;
+  border-radius: 25px;
+  border: 1px solid rgba(1, 33, 105, 0.1);
+  max-width: 560px;
+}
+
+.inputs-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 240px));
+  gap: 1.2rem 2.4rem;
+  justify-content: start;
+  align-items: start;
+}
+
+.field-full { grid-column: span 2; }
+.field-half { width: 100%; }
+
+label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+  color: #444;
+}
+
+input, select {
+  width: 100%;
+  padding: 0.9rem;
+  border-radius: 10px;
+  border: 1px solid rgba(1, 33, 105, 0.15);
+  background: white;
+  font-size: 0.95rem;
+  max-width: 100%;
+}
+
+.field-full input {
+  max-width: 100%;
+}
+
+.readonly-input {
+  background: #f1f4f9;
+  color: #012169;
+  font-weight: 700;
+  border-color: transparent;
+}
+
+.save-button {
+  margin-top: 2rem;
+  width: 100%;
+  padding: 1rem;
+  border-radius: 50px;
+  background: #012169;
+  color: white;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.save-button:hover:not(:disabled) { background: #009cde; transform: translateY(-2px); }
+.save-button:disabled { opacity: 0.4; }
+
+.valid { color: #1e8f63; font-weight: 700; }

@@ -100,4 +100,35 @@ export class CreatorService {
       { state }
     );
   }
+
+  updateCourseAccess(
+    id: number | string,
+    payload: { accessModel: 'FREE' | 'PAID'; price: number; freeLessonIds: Array<number | string> }
+  ): Observable<{
+    courseId: number | string;
+    accessModel: 'FREE' | 'PAID';
+    price: number;
+    isFree: boolean;
+    freeLessonIds: Array<number | string>;
+  }> {
+    return this.http.patch<{
+      courseId: number | string;
+      accessModel: 'FREE' | 'PAID';
+      price: number;
+      isFree: boolean;
+      freeLessonIds: Array<number | string>;
+    }>(`${environment.apiBaseUrl}/api/courses/${id}/access`, payload);
+  }
+
+  getProfile(): Observable<any> {
+    return this.http.get<any>(`${environment.apiBaseUrl}/api/creator/profile`);
+  }
+
+  updateProfile(id: string, payload: any): Observable<any> {
+    return this.http.put<any>(`${environment.apiBaseUrl}/api/creator/${id}`, payload);
+  }
+
+  saveBankAccount(payload: any): Observable<any> {
+    return this.http.post<any>(`${environment.apiBaseUrl}/api/payments/bank-account`, payload);
+  }
 }
